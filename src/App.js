@@ -1,36 +1,54 @@
 import logo from './logo.svg';
 import './App.css';
-import { BrowserRouter,Route } from 'react-router-dom';
+import { BrowserRouter,Route , Redirect } from 'react-router-dom';
 import Login from './user/Login';
 import Register from './user/Register';
-import AddProduct from './products/AddProduct';
-import UpdateProduct from './products/UpdateProduct';
-import ListProduct from './products/ListProduct';
+import AddProduct from './WareHouse/AddProduct';
+import UpdateProduct from './WareHouse/UpdateProduct';
+import ListProduct from './WareHouse/Warehous_List';
 import MasterFile from './containers/masterfile/MasterFile';
-import Protect from './Protect';
+import UnAuth from './Guard/UnAuth';
+import Auth from './Guard/Auth';
+import WarehouseDetails from './WareHouse/Warehouse_Details';
+
 function App() {
   return (
     <div className="App">
+
       <BrowserRouter>
         <Route path='/login'>
-          <Login/>
+          <Auth Cmp={Login}/>
         </Route>
+
         {/* <Route path='/register'>
-          <Register/>
+        <Auth Cmp={Register}/>
         </Route> */}
+
+        <Route path='/'>
+          <Redirect to='/masterfile' />
+        </Route>
+
         <Route path='/masterfile'>
-          <MasterFile/>
+          {/* <MasterFile/> */}
+          <UnAuth Cmp={MasterFile} />
         </Route>
 
         <Route path='/add'>
-          <Protect Cmp={AddProduct}/>
+          <UnAuth Cmp={AddProduct}/>
         </Route>
+
         <Route path='/update'>
-          <Protect Cmp={UpdateProduct}/>
+          <UnAuth Cmp={UpdateProduct}/>
         </Route>
+
         <Route path='/list'>
-          <Protect Cmp={ListProduct}/>
+          <UnAuth Cmp={ListProduct}/>
         </Route>
+
+        <Route path='/warehouse/:id'>
+          <UnAuth Cmp={WarehouseDetails}/>
+        </Route>
+
     </BrowserRouter>
     </div >
   );

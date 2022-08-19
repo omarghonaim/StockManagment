@@ -1,13 +1,13 @@
-import React,{useState,useEffect} from "react"
+import React,{useEffect} from "react"
 import { useHistory } from "react-router-dom";
 
-function Protect(props){
+function UnAuth(props){
     let Cmp = props.Cmp
     const history = useHistory("");
     useEffect(()=>{
         if(!localStorage.getItem('token'))
         {
-            history.push('/register');
+            history.push('/');
         }
     },[])
 
@@ -17,4 +17,4 @@ function Protect(props){
         </div>
     )
 }
-export default Protect
+export default UnAuth

@@ -1,6 +1,8 @@
 import Header from "../Header";
 import { Table } from 'react-bootstrap';
 import React,{ useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
+
 function ListProduct() {
     const [data, setData] = useState([]);
     const token = localStorage.getItem('token');
@@ -44,7 +46,7 @@ function ListProduct() {
                                     <td>{item.id}</td>
                                     <td>{item.name}</td>
                                     <td>{item.is_active}</td>
-                                    <td><a href={`/warehouse/${item.id}`} className='btn btn-primary' >Show warehouse</a>
+                                    <td><Link to={`/warehouse/${item.id}`} className='btn btn-primary' >Show warehouse</Link>
                                      
                                      </td>
                                 </tr>

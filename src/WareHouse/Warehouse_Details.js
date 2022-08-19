@@ -1,0 +1,195 @@
+import React,{ useState, useEffect} from 'react';
+import axiosIstance from '../Config/config';
+import { useParams } from "react-router"
+import Header from "../Header"
+import { Table } from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+
+
+
+const WarehouseDetails = () => {
+
+    const [warehouse, setWarehouse]= useState({})
+    const [items, setItems]= useState([])
+    const [warehouse_Item,setWarehouse_Item]= useState({})
+    const [show_item, setShow_item] = useState(false);
+    const [show_item_list, setShow_item_list] = useState(false);
+    const [MasterFile_Items,setMasterFile_Items] = useState([]);
+    const [attach_Item_Form, setAttach_Item_Form] = useState({warehouse_id:'',item_code:''})
+
+    const handleClose = () => {
+        setWarehouse_Item({})
+        setShow_item(false)};
+
+    const handleShow = (id) => {
+        getWarehouse_Item(id)
+        setShow_item(true)
+    };
+
+    const handleClose_List = () => setShow_item_list(false);
+
+    const handleShow_list = () => {
+        getMasterFileItems()
+        setShow_item_list(true)};
+
+    const params = useParams()
+
+    const getWarehouse = () =>{
+        axiosIstance.get(`warehouses/${params.id}`).then((res)=>{
+            setWarehouse(res.data.data[0])
+            console.log(warehouse)
+        })
+    }
+
+    const getWarehouseItems = () =>{
+      axiosIstance.post('warehouseItems/index',{'warehouse_id':params.id}).then((res)=>{
+        setItems(res.data.data);
+        console.log(items)
+      })
+    }
+
+    const getMasterFileItems = () =>{
+        axiosIstance.post('masterFile/index').then((res)=>{
+            setMasterFile_Items(res.data.data)
+            console.log('items',MasterFile_Items)
+        })
+    }
+
+    const getWarehouse_Item = (id) =>{
+     axiosIstance.get(`warehouseItems/${id}`).then((res)=>{
+        setWarehouse_Item(res.data.data[0])
+        console.log(warehouse_Item)
+     })
+    }
+
+    const change_master_file=(e) =>{
+       setAttach_Item_Form({...attach_Item_Form, item_code: e.target.value})
+       console.log(attach_Item_Form)
+    }
+
+    const AttachItemToWareHouse= () =>{
+        console.log(attach_Item_Form)
+        axiosIstance.post('warehouseItems/store',attach_Item_Form).then((res)=>{
+            console.log(res)
+            getWarehouseItems()
+            handleClose_List()
+        })
+    }
+
+    useEffect(()=> {
+        getWarehouse()
+        getWarehouseItems()
+        setAttach_Item_Form({...attach_Item_Form,warehouse_id:params.id})
+    },[])
+
+
+    return (
+        <React.Fragment>
+            <Header />
+            <div className=' my-3'>
+                <h1>{warehouse.name} <span className={` badge ${warehouse.is_active ? "text-bg-success" : "text-bg-danger"} `}>{warehouse.is_active? 'Active' : 'Disabled'}</span></h1>
+                <p> created at : {warehouse.created_at}</p>
+                <Button onClick={()=>handleShow_list()}>Add Item to warehouse</Button>
+            </div>
+
+            <div className='row justify-content-center'>
+                <h2>warehouse items</h2>
+                <div className='col-7'>
+                <Table bordered hover size="sm">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>WareHouse_ID</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                {
+                    items.map((item,index)=>{
+                        return (
+                            <tr key={index}>
+                               <td>{item.id}</td>
+                               <td>{item.masterFile_item_id}</td>
+                               <td>{item.description}</td>
+                               <td>{item.retail_price}</td>
+                               <td>
+                                <div className='d-flex'>
+                                <Button onClick={()=> handleShow(item.id)}>Details</Button>
+                                </div>
+                               </td>
+                            </tr>
+                        )
+                    })
+                }
+                </tbody>
+           </Table>
+            </div>
+            </div>
+
+
+    <Modal show={show_item} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>{warehouse_Item.description}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+            <Table>
+                <tr>
+                    <th>ID</th>
+                    <td>{warehouse_Item.id}</td>
+                </tr>
+                <tr>
+                    <th>Item_Code</th>
+                    <td>{warehouse_Item.item_code}</td>
+                </tr>
+                <tr>
+                    <th>WareHouse_ID</th>
+                    <td>{warehouse_Item.warehouse_id}</td>
+                </tr>
+                <tr>
+                    <th>location</th>
+                    <td>{warehouse_Item.location? warehouse_Item.location : '--'}</td>
+                </tr>
+                <tr>
+                   <th>created_at</th>
+                   <td>{warehouse_Item.created_at}</td>
+                </tr>
+                <tr>
+                  <th>retail_price</th>
+                  <td>{warehouse_Item.retail_price}</td>
+                </tr>
+                <tr>
+                  <th>masterFile_item_id</th>
+                  <td>{warehouse_Item.masterFile_item_id}</td>
+                </tr>
+            </Table>        
+        </Modal.Body>
+      </Modal>
+
+
+      <Modal show={show_item_list} onHide={handleClose_List}>
+        <Modal.Header closeButton>
+          <Modal.Title>List of Items in Masterfile</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+              <Form.Select onChange={($event)=> change_master_file($event)}>
+                {MasterFile_Items.map((item,index)=>{
+                    return(
+                        <option key={index} value={item.item_code}> {item.description+ '-'+ item.item_code } </option>
+                    )
+                })}
+              </Form.Select>
+        </Modal.Body>
+        <Modal.Footer className="d-flex justify-content-center">
+            <Button className="btn btn-success " onClick={()=> AttachItemToWareHouse()}>Attach Item to WareHouse</Button>
+        </Modal.Footer>
+      </Modal>
+
+        </React.Fragment>
+    );
+}
+
+export default WarehouseDetails;
