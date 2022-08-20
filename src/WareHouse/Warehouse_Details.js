@@ -65,21 +65,21 @@ const WarehouseDetails = () => {
       })
     }
 
+    const getWarehouse_Item = (id) =>{
+        axiosIstance.get(`warehouseItems/${id}`).then((res)=>{
+           setWarehouse_Item(res.data.data[0])
+           console.log(warehouse_Item)
+        })
+       }
+
     const getMasterFileItems = () =>{
         setLoader(false)
         axiosIstance.post('masterFile/index').then((res)=>{
             setMasterFile_Items(res.data.data)
             console.log('items',MasterFile_Items)
-            setAttach_Item_Form({...attach_Item_Form, item_code: MasterFile_Items[0]?.item_code})
+            setAttach_Item_Form({...attach_Item_Form, item_code: res.data.data[0]?.item_code})
             setLoader(true)
         })
-    }
-
-    const getWarehouse_Item = (id) =>{
-     axiosIstance.get(`warehouseItems/${id}`).then((res)=>{
-        setWarehouse_Item(res.data.data[0])
-        console.log(warehouse_Item)
-     })
     }
 
     const change_master_file=(e) =>{
