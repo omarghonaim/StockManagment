@@ -6,11 +6,12 @@ import { Table } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-
+import ReactLoader from 'react-loader';
 
 
 const WarehouseDetails = () => {
 
+    const [loader, setLoader] = useState(true)
     const [warehouse, setWarehouse]= useState({})
     const [items, setItems]= useState([])
     const [warehouse_Item,setWarehouse_Item]= useState({})
@@ -30,7 +31,9 @@ const WarehouseDetails = () => {
         setShow_item(true)
     };
 
-    const handleClose_List = () => setShow_item_list(false);
+    const handleClose_List = () => {
+        setSearch_result('')
+        setShow_item_list(false);}
 
     const handleShow_list = () => {
         getMasterFileItems()
@@ -63,10 +66,12 @@ const WarehouseDetails = () => {
     }
 
     const getMasterFileItems = () =>{
+        setLoader(false)
         axiosIstance.post('masterFile/index').then((res)=>{
             setMasterFile_Items(res.data.data)
             console.log('items',MasterFile_Items)
-            setAttach_Item_Form({...attach_Item_Form, item_code: MasterFile_Items[0].item_code})
+            setAttach_Item_Form({...attach_Item_Form, item_code: MasterFile_Items[0]?.item_code})
+            setLoader(true)
         })
     }
 
@@ -94,6 +99,12 @@ const WarehouseDetails = () => {
     const Search_Item = () =>{
       axiosIstance.post('warehouseItems/checkItemWarehouse',attach_Item_Form).then((res)=>{
         console.log(res)
+        setSearch_result(res.data.message)
+
+        setTimeout(() =>{
+            setSearch_result('')
+        },3000)
+
       })
     }
 
@@ -217,6 +228,7 @@ const WarehouseDetails = () => {
           <Modal.Title>List of Items in Masterfile</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+            <ReactLoader loaded={loader}  length={10}  radius={20}  width={10} >
               <Form.Select  onChange={($event)=> change_master_file($event)}>
                 {MasterFile_Items.map((item,index)=>{
                     return(
@@ -224,7 +236,8 @@ const WarehouseDetails = () => {
                     )
                 })}
               </Form.Select>
-              <p></p>
+              <p className="my-2 text-dark">{search_result}</p>
+           </ReactLoader> 
         </Modal.Body>
         <Modal.Footer className="d-flex justify-content-center">
             <Button className="btn btn-success " onClick={()=> AttachItemToWareHouse()}>Attach Item to WareHouse</Button>
