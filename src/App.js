@@ -3,8 +3,7 @@ import './App.css';
 import { BrowserRouter,Route , Redirect } from 'react-router-dom';
 import Login from './user/Login';
 import Register from './user/Register';
-import AddProduct from './WareHouse/AddProduct';
-import UpdateProduct from './WareHouse/UpdateProduct';
+
 import ListProduct from './WareHouse/Warehous_List';
 import MasterFile from './containers/masterfile/MasterFile';
 import UnAuth from './Guard/UnAuth';
@@ -31,14 +30,6 @@ function App() {
         <Route path='/masterfile'>
           {/* <MasterFile/> */}
           <UnAuth Cmp={MasterFile} />
-        </Route>
-
-        <Route path='/add'>
-          <UnAuth Cmp={AddProduct}/>
-        </Route>
-
-        <Route path='/update'>
-          <UnAuth Cmp={UpdateProduct}/>
         </Route>
 
         <Route path='/list'>
