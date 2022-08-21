@@ -73,7 +73,6 @@ function Index() {
     return (
         <React.Fragment>
             
-                <h1>Master Filesss</h1>
                 <div className='col-sm-8 offset-sm-2 '>
                 <Table  bordered hover size="lg">
                     <thead>

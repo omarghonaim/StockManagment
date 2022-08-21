@@ -17,9 +17,9 @@ function Header() {
                     {
                         localStorage.getItem('token') ?
                             <>
-                                <Link to="/add">add product</Link>
-                                <Link to="/update">update product</Link>
-                                <Link to="/list">product list</Link>
+                                {/* <Link to="/add">add product</Link>
+                                <Link to="/update">update product</Link> */}
+                                <Link to="/list">WareHouse</Link>
                             </>
                              :
                             <>
