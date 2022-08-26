@@ -1,8 +1,8 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter,Route , Redirect } from 'react-router-dom';
 import Login from './user/Login';
-import Register from './user/Register';
+// import Register from './user/Register';
 
 import ListProduct from './WareHouse/Warehous_List';
 import MasterFile from './containers/masterfile/MasterFile';
