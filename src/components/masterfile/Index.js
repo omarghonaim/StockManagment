@@ -13,6 +13,7 @@ function Index() {
     const[Master_Item, setMaster_Item] = useState({})
     const [show_item, setShow_item] = useState(false);
     const [show_update, setShow_update] = useState(false);
+    const [show_New_Item, setShow_New_Item] = useState(false);
 
 
 
@@ -30,10 +31,19 @@ function Index() {
         setShow_update(false)};
     
       const handleShow_update = (item) => {
-        console.log('item >>>>>',item)
         setMaster_Item(item)
         setShow_update(true);
     }
+
+
+    const handleClose_New_Item = () => {
+      setMaster_Item({})
+      setShow_New_Item(false)};
+  
+    const handleShow_New_Item = () => {
+      setShow_New_Item(true);
+  }
+
   
       const getMasterFileItems = ()=>{
       axiosIstance.post('masterFile/index').then((res)=>{
@@ -62,6 +72,20 @@ function Index() {
             getMasterFileItems()
             handleClose_update()
         })
+    }
+
+    const Add_New_Item = () => {
+
+      var NewItem ={
+        item_code : Master_Item.item_code,
+        description : Master_Item.description,
+        retail_price : Master_Item.retail_price
+    }
+
+    axiosIstance.post('masterFile/store',NewItem).then((res)=>{
+        getMasterFileItems()
+        handleClose_New_Item()
+    })
 
     }
 
@@ -74,6 +98,7 @@ function Index() {
         <React.Fragment>
             
                 <div className='col-sm-8 offset-sm-2 '>
+                  <Button className='btn btn-primary mb-3'onClick={()=>{ handleShow_New_Item() }}>ADD New Item</Button>
                 <Table  bordered hover size="lg">
                     <thead>
                         <tr>
@@ -154,7 +179,7 @@ function Index() {
                  <FormGroup row>  
                    <Label for="item_code" sm={3}>item code</Label>  
                    <Col sm={9}>  
-                     <Input type="text" name="item_code" value={Master_Item.item_code} onInput={(e)=>{ setMaster_Item({...Master_Item,item_code: e.target.value}) }}  placeholder="Enter item-code" />  
+                     <Input type="text" name="item_code" disabled value={Master_Item.item_code} onInput={(e)=>{ setMaster_Item({...Master_Item,item_code: e.target.value}) }}  placeholder="Enter item-code" />  
                    </Col>  
                  </FormGroup>  
                  <FormGroup row>  
@@ -177,6 +202,41 @@ function Index() {
         </Modal.Footer>
         </Form>
 
+     </Modal>
+
+
+     <Modal show={show_New_Item} onHide={handleClose_New_Item}>
+        <Modal.Header closeButton>
+          <Modal.Title> Add New Item</Modal.Title>
+        </Modal.Header>
+        <Form className="form">  
+          <Modal.Body>
+               <Col>  
+                 <FormGroup row>  
+                   <Label for="item_code" sm={3}>item code</Label>  
+                   <Col sm={9}>  
+                     <Input type="text" name="item_code"  value={Master_Item.item_code} onInput={(e)=>{ setMaster_Item({...Master_Item,item_code: e.target.value}) }}  placeholder="Enter item-code" />  
+                   </Col>  
+                 </FormGroup>  
+                 <FormGroup row>  
+                   <Label for="description" sm={3}>description</Label>  
+                   <Col sm={9}>  
+                     <Input type="text" name="description" value={Master_Item.description}  onInput={(e)=>{ setMaster_Item({...Master_Item,description: e.target.value}) }} placeholder="Enter description" />  
+                   </Col>  
+                 </FormGroup>  
+                 <FormGroup row>  
+                   <Label for="retail_price" sm={3}>retail price</Label>  
+                   <Col sm={9}>  
+                     <Input type="text" name="retail_price" value={Master_Item.retail_price}  onInput={(e)=>{ setMaster_Item({...Master_Item,retail_price: e.target.value}) }} placeholder="Enter retail price" />  
+                   </Col>  
+                 </FormGroup>  
+               </Col>    
+                
+        </Modal.Body>
+        <Modal.Footer className="d-flex justify-content-center">
+            <Button className="btn btn-success " onClick={()=> Add_New_Item() }>ADD</Button>
+        </Modal.Footer>
+        </Form>
      </Modal>
 
         </React.Fragment>

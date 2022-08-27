@@ -7,6 +7,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import ReactLoader from 'react-loader';
+import SilpDetails from '../components/Silps/Silp_Details'
 
 
 const WarehouseDetails = () => {
@@ -21,6 +22,10 @@ const WarehouseDetails = () => {
     const [attach_Item_Form, setAttach_Item_Form] = useState({warehouse_id:'',item_code:''})
     const [show_Location, setShow_Location] = useState(false);
     const [search_result, setSearch_result] = useState('')
+    ////////////////////////////////////////////////////////////////
+    const [silps , setSilps] = useState([])
+    const [silp_detail , setSilp_detail] = useState(false)
+    const [silp_detail_id , setSilp_detail_id] = useState(0)
 
     const handleClose = () => {
         setWarehouse_Item({})
@@ -130,9 +135,19 @@ const WarehouseDetails = () => {
         })
     }
 
+
+    const getSilpssOfWarehouse = ()=>{
+
+      axiosIstance.post('receivingSlips/index',{'warehouse_id':params.id}).then(response=>{
+        console.log(response)
+        setSilps(response.data.data)
+      })
+    }
+
     useEffect(()=> {
         getWarehouse()
         getWarehouseItems()
+        getSilpssOfWarehouse()
         setAttach_Item_Form({...attach_Item_Form,warehouse_id:params.id})
     },[])
 
@@ -146,9 +161,9 @@ const WarehouseDetails = () => {
                 <Button onClick={()=>handleShow_list()}>Add Item to warehouse</Button>
             </div>
 
-            <div className='row justify-content-center'>
+            <div className='row gx-2 justify-content-center'>
                 <h2>warehouse items</h2>
-                <div className='col-7'>
+                <div className='col-6'>
                 <Table bordered hover size="lg">
                     <thead>
                     <tr>
@@ -179,8 +194,45 @@ const WarehouseDetails = () => {
                     })
                 }
                 </tbody>
-           </Table>
-            </div>
+                </Table>
+                 </div>
+                 <div className='col-6'>
+                 <Table bordered hover size="lg">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>PO_number</th>
+                        <th>Status</th>
+                        <th>Created_at</th>
+                        <th>Actions</th>
+                    </tr>
+
+                    </thead>
+                    <tbody>
+                    {
+                    silps.map((silp,index)=>{
+                        return (
+                            <tr key={index}>
+                               <td>{silp.id}</td>
+                               <td>{silp.PO_number}</td>
+                               <td>{silp.status}</td>
+                               <td>{silp.created_at}</td>
+                               <td>
+                                <div className='d-flex'>
+                                <Button className='m-1' onClick={()=> {setSilp_detail_id(silp.id);setSilp_detail(true);}}>Details</Button>
+                                <Button className='m-1' onClick={()=> {} }> Cancel</Button>
+                                </div>
+                               </td>
+                            </tr>
+                        )
+                    })
+                }
+
+                    </tbody>
+                 </Table>
+                 </div>
+
+
             </div>
 
 
@@ -259,6 +311,11 @@ const WarehouseDetails = () => {
             <Button className="btn btn-success " onClick={()=> updateLocation()}>Update Location</Button>
         </Modal.Footer>
       </Modal>
+
+      {silp_detail ? 
+        <SilpDetails show={silp_detail} id={silp_detail_id}  handleClose={()=> setSilp_detail(false)} ></SilpDetails>
+        : ''
+      }
         </React.Fragment>
     );
 }
