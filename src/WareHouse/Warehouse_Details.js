@@ -23,11 +23,15 @@ const WarehouseDetails = () => {
     const [MasterFile_Items,setMasterFile_Items] = useState([]);
     const [attach_Item_Form, setAttach_Item_Form] = useState({warehouse_id:'',item_code:''})
     const [show_Location, setShow_Location] = useState(false);
-    const [search_result, setSearch_result] = useState('')
+    const [search_result, setSearch_result] = useState('');
     ////////////////////////////////////////////////////////////////
     const [silps , setSilps] = useState([])
     const [silp_detail , setSilp_detail] = useState(false)
     const [silp_detail_id , setSilp_detail_id] = useState(0)
+	const [slip, setSlip] = useState({});
+	const [add_slip, setAdd_slip] = useState(false);
+	////////////////////////////////////////
+
 
     const handleClose = () => {
         setWarehouse_Item({})
@@ -49,6 +53,7 @@ const WarehouseDetails = () => {
   const handleClose_Location = () => {
     setWarehouse_Item({})
     setShow_Location(false)};
+
 
   const handleShow_Location = (item) => {
     console.log('item >>>>>',item)
@@ -137,7 +142,21 @@ const WarehouseDetails = () => {
         })
     }
 
+    const addSlip = () => {
 
+		var NewItem ={
+		  warehouse_id : params.id,
+		  PO_number : slip.PO_number,
+		  supplier_name : slip.supplier_name
+
+	  }
+
+	  axiosIstance.post('receivingSlips/store',NewItem).then((res)=>{
+		  getSilpssOfWarehouse()
+		  handleClose_addSlip()
+	  })
+
+	  }
     const getSilpssOfWarehouse = ()=>{
 
       axiosIstance.post('receivingSlips/index',{'warehouse_id':params.id}).then(response=>{
@@ -146,6 +165,9 @@ const WarehouseDetails = () => {
       })
     }
 
+
+
+
     useEffect(()=> {
         getWarehouse()
         getWarehouseItems()
@@ -153,7 +175,25 @@ const WarehouseDetails = () => {
         setAttach_Item_Form({...attach_Item_Form,warehouse_id:params.id})
     },[])
 
+	const handleShow_addSlip = () => {
+		setAdd_slip(true);
+	}
+   const handleClose_addSlip = () => {
+        	setAdd_slip(false)};
 
+	const cancelSlip = (id) => {
+
+        var canceledSlip ={
+            _method :"put",
+            receivingSlip_id :id,
+            status : 'Canceled'
+        }
+        axiosIstance.post('receivingSlips/update',canceledSlip).then((res)=>{
+            console.log('update >>>>>>>', res)
+			getSilpssOfWarehouse();
+        })
+
+	};
     return (
         <React.Fragment>
             <Header />
@@ -161,6 +201,8 @@ const WarehouseDetails = () => {
                 <h1>{warehouse.name} <span className={` badge ${warehouse.is_active ? "text-bg-success" : "text-bg-danger"} `}>{warehouse.is_active? 'Active' : 'Disabled'}</span></h1>
                 <p> created at : {warehouse.created_at}</p>
                 <Button onClick={()=>handleShow_list()}>Add Item to warehouse</Button>
+				<Button onClick={()=>handleShow_addSlip()}>Add Slip</Button>
+
             </div>
 
             <div className='row  justify-content-center'>
@@ -213,6 +255,7 @@ const WarehouseDetails = () => {
                     <tr>
                         <th>ID</th>
                         <th>PO_number</th>
+						<th>Supplier Name</th>
                         <th>Status</th>
                         <th>Created_at</th>
                         <th>Actions</th>
@@ -226,12 +269,13 @@ const WarehouseDetails = () => {
                             <tr key={index}>
                                <td>{silp.id}</td>
                                <td>{silp.PO_number}</td>
+							   <td>{silp.supplier_name}</td>
                                <td>{silp.status}</td>
                                <td>{silp.created_at}</td>
                                <td>
                                 <div className='d-flex'>
                                 <Button className='m-1' onClick={()=> {setSilp_detail_id(silp.id);setSilp_detail(true);}}>Details</Button>
-                                <Button className='m-1' onClick={()=> {} }> Cancel</Button>
+                                <Button className='m-1' onClick={()=> {cancelSlip(silp.id)} }> Cancel</Button>
                                 </div>
                                </td>
                             </tr>
@@ -286,7 +330,7 @@ const WarehouseDetails = () => {
                   <th>masterFile_item_id</th>
                   <td>{warehouse_Item.masterFile_item_id}</td>
                 </tr>
-            </Table>        
+            </Table>
         </Modal.Body>
       </Modal>
 
@@ -305,7 +349,7 @@ const WarehouseDetails = () => {
                 })}
               </Form.Select>
               <p className="my-2 text-dark">{search_result}</p>
-           </ReactLoader> 
+           </ReactLoader>
         </Modal.Body>
         <Modal.Footer className="d-flex justify-content-center">
             <Button className="btn btn-success " onClick={()=> AttachItemToWareHouse()}>Attach Item to WareHouse</Button>
@@ -327,11 +371,29 @@ const WarehouseDetails = () => {
             <Button className="btn btn-success " onClick={()=> updateLocation()}>Update Location</Button>
         </Modal.Footer>
       </Modal>
+	  <Modal show={add_slip} onHide={handleClose_addSlip}>
+        <Modal.Header closeButton>
+          <Modal.Title>Store Slip </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+		   <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+             <Form.Label>PO Number</Form.Label>
+             <Form.Control value={slip.PO_number} onInput={(e)=>{ setSlip({...slip,PO_number: e.target.value}) }}  type="Text" placeholder="Enter Po Number" />
+           </Form.Group>
+		   <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+             <Form.Label>Supplier Name</Form.Label>
+             <Form.Control value={slip.supplier_name} onInput={(e)=>{ setSlip({...slip,supplier_name: e.target.value}) }} type="Text" placeholder="Enter Supplier Name" />
+           </Form.Group>
+        </Modal.Body>
+        <Modal.Footer className="d-flex justify-content-center">
+            <Button className="btn btn-success " onClick={()=> addSlip()}>add Slip</Button>
+        </Modal.Footer>
+      </Modal>
 
       {silp_detail ? 
         <SilpDetails show={silp_detail} silp_id={silp_detail_id}  handleClose={()=> setSilp_detail(false)} warehouse_id={params.id} ></SilpDetails>
-        : ''
-      }
+
+
         </React.Fragment>
     );
 }

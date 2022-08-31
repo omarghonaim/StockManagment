@@ -15,6 +15,10 @@ function App() {
     <div className="App">
 
       <BrowserRouter>
+	  <Route path='/' exact>
+          <Redirect to='/login' />
+        </Route>
+
         <Route path='/login'>
           <Auth Cmp={Login}/>
         </Route>
