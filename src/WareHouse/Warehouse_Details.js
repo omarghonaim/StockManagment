@@ -8,6 +8,8 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import ReactLoader from 'react-loader';
 import SilpDetails from '../components/Silps/Silp_Details'
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
 
 
 const WarehouseDetails = () => {
@@ -203,9 +205,13 @@ const WarehouseDetails = () => {
 
             </div>
 
-            <div className='row gx-2 justify-content-center'>
-                <h2>warehouse items</h2>
-                <div className='col-6'>
+            <div className='row  justify-content-center'>
+
+            <Tabs defaultActiveKey="items"  id="justify-tab-example" className="my-3 col-12" justify >
+              <Tab eventKey="items" title="Warehouse Items">
+              <h2>warehouse items</h2>
+              <div className="row">
+                <div className='col-12 px-5'>
                 <Table bordered hover size="lg">
                     <thead>
                     <tr>
@@ -238,7 +244,12 @@ const WarehouseDetails = () => {
                 </tbody>
                 </Table>
                  </div>
-                 <div className='col-6'>
+              </div>
+
+              </Tab>
+              <Tab eventKey="silps" title=" WareHouse Silps">
+             <div className="row">
+              <div className='col-12 px-5'>
                  <Table bordered hover size="lg">
                     <thead>
                     <tr>
@@ -275,6 +286,11 @@ const WarehouseDetails = () => {
                     </tbody>
                  </Table>
                  </div>
+             </div>
+              </Tab>
+   
+            </Tabs>
+                 
 
 
             </div>
@@ -374,10 +390,10 @@ const WarehouseDetails = () => {
         </Modal.Footer>
       </Modal>
 
-      {silp_detail ?
-        <SilpDetails show={silp_detail} id={silp_detail_id}  handleClose={()=> setSilp_detail(false)} ></SilpDetails>
-        : ''
-      }
+      {silp_detail ? 
+        <SilpDetails show={silp_detail} silp_id={silp_detail_id}  handleClose={()=> setSilp_detail(false)} warehouse_id={params.id} ></SilpDetails>
+
+
         </React.Fragment>
     );
 }
