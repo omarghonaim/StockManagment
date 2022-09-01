@@ -200,8 +200,8 @@ const WarehouseDetails = () => {
             <div className=' my-3'>
                 <h1>{warehouse.name} <span className={` badge ${warehouse.is_active ? "text-bg-success" : "text-bg-danger"} `}>{warehouse.is_active? 'Active' : 'Disabled'}</span></h1>
                 <p> created at : {warehouse.created_at}</p>
-                <Button onClick={()=>handleShow_list()}>Add Item to warehouse</Button>
-				<Button onClick={()=>handleShow_addSlip()}>Add Slip</Button>
+                <Button className='mx-1' onClick={()=>handleShow_list()}>Add Item to warehouse</Button>
+				<Button  className='mx-1' onClick={()=>handleShow_addSlip()}>Add Slip</Button>
 
             </div>
 

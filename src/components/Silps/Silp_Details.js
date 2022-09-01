@@ -16,6 +16,10 @@ const SilpDetails = ({show,handleClose,silp_id , warehouse_id,wareHouseItems}) =
    const [silp_item_id,setSilp_items_id] = useState(0)
    ////////////////////////////////////
    const [warehouseItems, setWarehouseItems] = useState(false)
+   ////////////////////////////////
+   const [cancel_item,setcancel_item] = useState(false)
+   const [show_upadate,setshow_upadate] = useState(false)
+   const [update_item,setupdate_item] = useState({})
 
    //////////////
    const handleClose_silp_item = () => {
@@ -26,11 +30,56 @@ const SilpDetails = ({show,handleClose,silp_id , warehouse_id,wareHouseItems}) =
   };
 
 ////////////////////////
+
   const handleShow_warehouse_items = () => {
     setWarehouseItems(true)
   };
   const handleClose_warehouse_items = () => {
     setWarehouseItems(false)};
+
+
+//////////////////////////////////
+const handleClose_update_item = () => {
+  setupdate_item({});
+  setshow_upadate(false)
+}
+
+ const handleShow_update_item = (item) => {
+  console.log('asd')
+  setupdate_item(item);
+  setshow_upadate(true)
+};
+
+  const cancel_item_from_silp = ()=>{
+
+    let cancel_item ={
+      _method : 'put',
+      receivingSlip_item_id : silp_item_id
+    }
+
+    axiosIstance.post('receivingSlipItems/delete',cancel_item).then((response)=>{
+      console.log('delete',response)
+      setcancel_item(false);
+      getSilpItems()
+    })
+
+  }
+
+  const update_silp_item = () => {
+      let update = {
+        _method : 'put',
+        receivingSlip_item_id : update_item.id,
+        QTY : parseInt(update_item.QTY)
+      }
+
+      console.log('put',update)
+
+      axiosIstance.post('receivingSlipItems/update',update).then((response)=>{
+        console.log('update',response)
+        handleClose_update_item()
+        getSilpItems()
+      })
+  }
 
 
 
@@ -98,6 +147,10 @@ const SilpDetails = ({show,handleClose,silp_id , warehouse_id,wareHouseItems}) =
                                 <div className='d-flex'>
                                   <Button className='m-1' onClick={()=> {setSilp_items_id(item.id);handleShow_silp_item();}}>Details</Button>
 
+                                  <Button className='m-1' onClick={()=> {handleShow_update_item(item)} }> Update </Button>
+
+                                  <Button className='m-1' onClick={()=>{setSilp_items_id(item.id);setcancel_item(true)}}>Cancel</Button>
+
                                 </div>
                                </td>
                             </tr>
@@ -124,6 +177,42 @@ const SilpDetails = ({show,handleClose,silp_id , warehouse_id,wareHouseItems}) =
         <WarehouseItems   show={warehouseItems} close={()=> handleClose_warehouse_items()} wareHouseItems={wareHouseItems} ></WarehouseItems> : ''
       }
 
+
+      <Modal show={cancel_item} onHide={()=> setcancel_item(false)} size="md">
+        <Modal.Header closeButton>
+           <Modal.Title> delete item from silp </Modal.Title>
+        </Modal.Header>
+        <Modal.Body className='row justify-content-center align-item-center'>
+           are you sure you want to delete this item ?
+        </Modal.Body>
+        <Modal.Footer>
+          <div className="d-flex justify-content-space-between">
+            <Button className='m-1 btn-success' onClick={()=> {cancel_item_from_silp()}}>Yes</Button>
+            <Button className='m-1 btn-danger' onClick={()=> {setcancel_item(false)}}>No</Button>
+          </div>
+        </Modal.Footer>
+      </Modal>
+
+
+      <Modal show={show_upadate} onHide={handleClose_update_item} size="md">
+        <Modal.Header closeButton>
+           <Modal.Title> update item from silp </Modal.Title>
+        </Modal.Header>
+        <Modal.Body className='row justify-content-center align-item-center'>
+        <div class="mb-3">
+          <label for="qty" class="form-label">Email address</label>
+          <input type="text" class="form-control" id="qty" value={update_item.QTY} onInput={(e)=>{setupdate_item({...update_item,QTY :e.target.value })}}  ></input>
+         </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <div className="d-flex justify-content-space-between">
+            <Button className='m-1 btn-success' onClick={()=> {update_silp_item()}}>update</Button>
+          </div>
+        </Modal.Footer>
+      </Modal>
+
+
+   
     </React.Fragment>
     );
 }
