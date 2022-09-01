@@ -216,7 +216,7 @@ const WarehouseDetails = () => {
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>WareHouse_ID</th>
+                        <th>WareHouseItem_ID</th>
                         <th>Description</th>
                         <th>Price</th>
                         <th>Actions</th>
@@ -391,9 +391,9 @@ const WarehouseDetails = () => {
       </Modal>
 
       {silp_detail ? 
-        <SilpDetails show={silp_detail} silp_id={silp_detail_id}  handleClose={()=> setSilp_detail(false)} warehouse_id={params.id} ></SilpDetails>
+        <SilpDetails show={silp_detail} silp_id={silp_detail_id}  handleClose={()=> setSilp_detail(false)} warehouse_id={params.id} wareHouseItems={items} ></SilpDetails>
 
-
+        :''}
         </React.Fragment>
     );
 }
