@@ -7,7 +7,7 @@ function Login() {
     const history = useHistory("");
     useEffect(() => {
         if (localStorage.getItem('token')) {
-            history.push('/add');
+            history.push('/masterfile');
         }
     }, [])
     async function login() {
@@ -26,7 +26,7 @@ function Login() {
         } else {
             // localStorage.setItem("user-info", JSON.stringify(result))
             localStorage.setItem("token", JSON.stringify(result.data[0].access_token))
-            history.push('/add')
+            history.push('/masterfile')
         }
 
     }
@@ -34,7 +34,7 @@ function Login() {
         <>
             <Header />
             <div className='col-sm-6 offset-sm-3'>
-                <h1>login site</h1>
+                <h1>login</h1>
                 <input type='text' value={email} placeholder='Email' onChange={(e) => setEmail(e.target.value)} className='form-control' />
                 <br />
                 <input type='password' value={password} placeholder='Password' onChange={(e) => setPassword(e.target.value)} className='form-control' />

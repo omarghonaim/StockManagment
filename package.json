@@ -1,5 +1,6 @@
 {
-  "name": "front-end",
+  "name": "StockManagment",
+  "homepage":"http://Stock.ghonaim.com",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

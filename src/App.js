@@ -14,7 +14,7 @@ function App() {
   return (
     <div className="App">
 
-      <BrowserRouter>
+  <BrowserRouter>
 	  <Route path='/' exact>
           <Redirect to='/login' />
         </Route>

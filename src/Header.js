@@ -5,7 +5,7 @@ function Header() {
     const history = useHistory('');
     function logOut(){
         localStorage.clear();
-        history.push('/register')
+        history.push('/login')
     }
     let user = JSON.parse(localStorage.getItem('token'))
     return (
@@ -20,18 +20,18 @@ function Header() {
                                 {/* <Link to="/add">add product</Link>
                                 <Link to="/update">update product</Link> */}
                                 <Link to="/list">WareHouse</Link>
+                                <Link to="/masterfile">masterfile</Link>
                             </>
                              :
                             <>
                                 <Link to="/login">login</Link>
-                                <Link to="/register">register</Link>
                             </>
                     }
 
                 </Nav>
                 {
                     localStorage.getItem('token')?
-                <Nav>
+                <Nav style={{marginRight:'120px'}} >
                     <NavDropdown title={user && user.name}>
                         <NavDropdown.Item onClick={logOut} >logout</NavDropdown.Item>
                     </NavDropdown>

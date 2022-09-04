@@ -2,6 +2,7 @@ import Header from "../Header";
 import { Table } from 'react-bootstrap';
 import React,{ useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
 
 function ListProduct() {
     const [data, setData] = useState([]);
@@ -46,7 +47,7 @@ function ListProduct() {
                                     <td>{item.id}</td>
                                     <td>{item.name}</td>
                                     <td>{item.is_active}</td>
-                                    <td><Link to={`/warehouse/${item.id}`} className='btn btn-primary' >Show warehouse</Link>
+                                    <td><Link to={`/warehouse/${item.id}`} > <Button className='m-1'>Show warehouse</Button></Link>
                                      
                                      </td>
                                 </tr>
