@@ -1,0 +1,15 @@
+.header
+{
+    background-color: #23293d !important;
+    color: #ffffff !important;
+}
+.logo_text
+{
+    color: #ffffff;
+    font-size: 25px;
+    margin-left: 30px;
+}
+.header a {
+    color: #ffffff;
+    text-decoration: none;
+}

@@ -196,7 +196,6 @@ const WarehouseDetails = () => {
 	};
     return (
         <React.Fragment>
-            <Header />
             <div className=' my-3'>
                 <h1>{warehouse.name} <span className={` badge ${warehouse.is_active ? "text-bg-success" : "text-bg-danger"} `}>{warehouse.is_active? 'Active' : 'Disabled'}</span></h1>
                 <p> created at : {warehouse.created_at}</p>

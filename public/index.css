@@ -1,0 +1,6 @@
+#root
+{
+    height: 969px;
+    background: url('test.png') no-repeat center center fixed;
+    background-size: cover;
+}

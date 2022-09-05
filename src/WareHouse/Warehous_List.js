@@ -29,7 +29,6 @@ function ListProduct() {
 //     }
     return (
         <>
-            <Header />
             
                 <h1>product list site</h1>
                 <div className='col-sm-8 offset-sm-2 '>

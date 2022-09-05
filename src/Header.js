@@ -1,26 +1,28 @@
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
-import { Link,useHistory } from 'react-router-dom';
+import { Link,useHistory,Redirect } from 'react-router-dom';
+import './header.css';
 
 function Header() {
     const history = useHistory('');
     function logOut(){
         localStorage.clear();
-        history.push('/login')
+       history.push('/login');
     }
     let user = JSON.parse(localStorage.getItem('token'))
     return (
-        <div>
-            <Navbar bg="dark" variant="dark">
+        <div className='header'>
+            <Navbar>
 
-                <Navbar.Brand href="#home">Stock</Navbar.Brand>
-                <Nav className="me-auto navbar_wrapper">
+                <a href="#home" className='logo_text'>STOCK MANAGEMENT</a>
+                <Nav className="me-auto navbar_wrapper links">
                     {
                         localStorage.getItem('token') ?
                             <>
                                 {/* <Link to="/add">add product</Link>
                                 <Link to="/update">update product</Link> */}
-                                <Link to="/list">WareHouse</Link>
                                 <Link to="/masterfile">masterfile</Link>
+                                <Link to="/list">WareHouse</Link>
+                               
                             </>
                              :
                             <>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useHistory } from "react-router-dom";
-import Header from "../Header";
+// import Header from "../Header";
+import './user.css';
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -32,8 +33,8 @@ function Login() {
     }
     return (
         <>
-            <Header />
-            <div className='col-sm-6 offset-sm-3'>
+            {/* <Header /> */}
+            <div className='col-sm-6 offset-sm-3 login_page'>
                 <h1>login</h1>
                 <input type='text' value={email} placeholder='Email' onChange={(e) => setEmail(e.target.value)} className='form-control' />
                 <br />

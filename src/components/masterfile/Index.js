@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import axiosIstance from '../../Config/config';
 import Modal from 'react-bootstrap/Modal';
 import {  Col, Form , FormGroup, Label, Input, } from 'reactstrap';  
+import './masterfile.css';
 
 
 
@@ -97,7 +98,7 @@ function Index() {
     return (
         <React.Fragment>
             
-                <div className='col-sm-8 offset-sm-2 '>
+                <div className='col-sm-8 offset-sm-2 master_file_wrapper'>
                   <Button className='btn btn-primary mb-3'onClick={()=>{ handleShow_New_Item() }}>ADD New Item</Button>
                 <Table  bordered hover size="lg">
                     <thead>

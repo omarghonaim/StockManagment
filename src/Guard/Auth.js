@@ -1,5 +1,5 @@
 import React,{useEffect} from "react"
-import { useHistory } from "react-router-dom";
+import { useHistory,Redirect } from "react-router-dom";
 
 function Auth(props){
     let Cmp = props.Cmp
@@ -13,7 +13,9 @@ function Auth(props){
 
     return(
         <div>
+            
             <Cmp />
+          
         </div>
     )
 }

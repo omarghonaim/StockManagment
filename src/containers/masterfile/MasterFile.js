@@ -7,9 +7,8 @@ function MasterFile() {
    
     return (
         <>
-            <Header />
+
             <div className='col-sm-6 offset-sm-3'>
-                <h1>Items Master File</h1>
                 {/* < /> */}
                 <BrowserRouter>
                     <Route path='/masterfile' exact>
