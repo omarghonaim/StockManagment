@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect,useContext } from "react"
 import { useHistory } from "react-router-dom";
+import {UserContext} from '../user/userContext';
 // import Header from "../Header";
 import './user.css';
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const history = useHistory("");
+	const tokenContext = useContext(UserContext);
+
     useEffect(() => {
         if (localStorage.getItem('token')) {
             history.push('/masterfile');
@@ -26,6 +29,7 @@ function Login() {
             history.push('/login')
         } else {
             // localStorage.setItem("user-info", JSON.stringify(result))
+			tokenContext.setLogged(true);
             localStorage.setItem("token", JSON.stringify(result.data[0].access_token))
             history.push('/masterfile')
         }

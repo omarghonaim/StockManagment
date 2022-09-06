@@ -7,6 +7,7 @@ import ListProduct from './WareHouse/Warehous_List';
 import MasterFile from './containers/masterfile/MasterFile';
 import UnAuth from './Guard/UnAuth';
 import Auth from './Guard/Auth';
+import UserContextProvider from './user/userContext';
 import WarehouseDetails from './WareHouse/Warehouse_Details';
 import './App.css';
 
@@ -14,9 +15,9 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-             
+<UserContextProvider  >
   <BrowserRouter>
-  <Header /> 
+  <Header />
    {/* {localStorage.getItem('token') ? : ''} */}
 	  <Route path='/' exact>
           <Redirect to='/login' />
@@ -48,6 +49,7 @@ function App() {
         </Route>
 
     </BrowserRouter>
+	</UserContextProvider>
     </div >
   );
 }

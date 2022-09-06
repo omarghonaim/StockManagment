@@ -1,28 +1,34 @@
+import { useContext, useState, useSyncExternalStore } from 'react';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
-import { Link,useHistory,Redirect } from 'react-router-dom';
+import { Link,useHistory } from 'react-router-dom';
+import {UserContext} from './user/userContext';
 import './header.css';
 
 function Header() {
     const history = useHistory('');
+	const tokenContext = useContext(UserContext);
+	console.log("999", tokenContext);
+
     function logOut(){
         localStorage.clear();
-       history.push('/login');
+        history.push('/login');
+		tokenContext.setLogged(false);
     }
     let user = JSON.parse(localStorage.getItem('token'))
     return (
         <div className='header'>
             <Navbar>
 
-                <a href="#home" className='logo_text'>STOCK MANAGEMENT</a>
+                <a href="/" className='logo_text'>STOCK MANAGEMENT</a>
                 <Nav className="me-auto navbar_wrapper links">
                     {
-                        localStorage.getItem('token') ?
+                        tokenContext.token ?
                             <>
                                 {/* <Link to="/add">add product</Link>
                                 <Link to="/update">update product</Link> */}
                                 <Link to="/masterfile">masterfile</Link>
                                 <Link to="/list">WareHouse</Link>
-                               
+
                             </>
                              :
                             <>

@@ -1,13 +1,11 @@
 import { Table } from 'react-bootstrap';
-import React,{ useEffect, useState } from "react";
+import React,{ useEffect, useState,useContext } from "react";
 import Button from 'react-bootstrap/Button';
 import axiosIstance from '../../Config/config';
 import Modal from 'react-bootstrap/Modal';
-import {  Col, Form , FormGroup, Label, Input, } from 'reactstrap';  
+import {UserContext} from '../../user/userContext';
+import {  Col, Form , FormGroup, Label, Input, } from 'reactstrap';
 import './masterfile.css';
-
-
-
 
 function Index() {
     const [MasterFile_Items, setMasterFile_Items] = useState([]);
@@ -15,6 +13,7 @@ function Index() {
     const [show_item, setShow_item] = useState(false);
     const [show_update, setShow_update] = useState(false);
     const [show_New_Item, setShow_New_Item] = useState(false);
+	const tokenContext = useContext(UserContext);
 
 
 
@@ -30,7 +29,7 @@ function Index() {
     const handleClose_update = () => {
         setMaster_Item({})
         setShow_update(false)};
-    
+
       const handleShow_update = (item) => {
         setMaster_Item(item)
         setShow_update(true);
@@ -40,12 +39,12 @@ function Index() {
     const handleClose_New_Item = () => {
       setMaster_Item({})
       setShow_New_Item(false)};
-  
+
     const handleShow_New_Item = () => {
       setShow_New_Item(true);
   }
 
-  
+
       const getMasterFileItems = ()=>{
       axiosIstance.post('masterFile/index').then((res)=>{
         console.log(res)
@@ -90,14 +89,14 @@ function Index() {
 
     }
 
-  
+
     useEffect(()=> {
         getMasterFileItems()
-    }, [])
+    }, [tokenContext.token])
 
     return (
         <React.Fragment>
-            
+
                 <div className='col-sm-8 offset-sm-2 master_file_wrapper'>
                   <Button className='btn btn-primary mb-3'onClick={()=>{ handleShow_New_Item() }}>ADD New Item</Button>
                 <Table  bordered hover size="lg">
@@ -110,7 +109,7 @@ function Index() {
                         </tr>
                     </thead>
                     <tbody>
-                    
+
                         {
                             MasterFile_Items.map((item)=>
                                 <tr key={item.id}>
@@ -126,9 +125,9 @@ function Index() {
 
                                 </tr>
                             )
-                        }  
+                        }
 
-                        </tbody> 
+                        </tbody>
 
                 </Table>
                 </div>
@@ -165,7 +164,7 @@ function Index() {
                   <td>{Master_Item.retail_price}</td>
                 </tr>
                 </tbody>
-            </Table>        
+            </Table>
         </Modal.Body>
      </Modal>
 
@@ -173,30 +172,30 @@ function Index() {
         <Modal.Header closeButton>
           <Modal.Title> Upate Item </Modal.Title>
         </Modal.Header>
-        <Form className="form">  
+        <Form className="form">
           <Modal.Body>
 
-               <Col>  
-                 <FormGroup row>  
-                   <Label for="item_code" sm={3}>item code</Label>  
-                   <Col sm={9}>  
-                     <Input type="text" name="item_code" disabled value={Master_Item.item_code} onInput={(e)=>{ setMaster_Item({...Master_Item,item_code: e.target.value}) }}  placeholder="Enter item-code" />  
-                   </Col>  
-                 </FormGroup>  
-                 <FormGroup row>  
-                   <Label for="description" sm={3}>description</Label>  
-                   <Col sm={9}>  
-                     <Input type="text" name="description" value={Master_Item.description}  onInput={(e)=>{ setMaster_Item({...Master_Item,description: e.target.value}) }} placeholder="Enter description" />  
-                   </Col>  
-                 </FormGroup>  
-                 <FormGroup row>  
-                   <Label for="retail_price" sm={3}>retail price</Label>  
-                   <Col sm={9}>  
-                     <Input type="text" name="retail_price" value={Master_Item.retail_price}  onInput={(e)=>{ setMaster_Item({...Master_Item,retail_price: e.target.value}) }} placeholder="Enter retail price" />  
-                   </Col>  
-                 </FormGroup>  
-               </Col>    
-                
+               <Col>
+                 <FormGroup row>
+                   <Label for="item_code" sm={3}>item code</Label>
+                   <Col sm={9}>
+                     <Input type="text" name="item_code" disabled value={Master_Item.item_code} onInput={(e)=>{ setMaster_Item({...Master_Item,item_code: e.target.value}) }}  placeholder="Enter item-code" />
+                   </Col>
+                 </FormGroup>
+                 <FormGroup row>
+                   <Label for="description" sm={3}>description</Label>
+                   <Col sm={9}>
+                     <Input type="text" name="description" value={Master_Item.description}  onInput={(e)=>{ setMaster_Item({...Master_Item,description: e.target.value}) }} placeholder="Enter description" />
+                   </Col>
+                 </FormGroup>
+                 <FormGroup row>
+                   <Label for="retail_price" sm={3}>retail price</Label>
+                   <Col sm={9}>
+                     <Input type="text" name="retail_price" value={Master_Item.retail_price}  onInput={(e)=>{ setMaster_Item({...Master_Item,retail_price: e.target.value}) }} placeholder="Enter retail price" />
+                   </Col>
+                 </FormGroup>
+               </Col>
+
         </Modal.Body>
         <Modal.Footer className="d-flex justify-content-center">
             <Button className="btn btn-success " onClick={()=> updateItem()}>Update</Button>
@@ -210,29 +209,29 @@ function Index() {
         <Modal.Header closeButton>
           <Modal.Title> Add New Item</Modal.Title>
         </Modal.Header>
-        <Form className="form">  
+        <Form className="form">
           <Modal.Body>
-               <Col>  
-                 <FormGroup row>  
-                   <Label for="item_code" sm={3}>item code</Label>  
-                   <Col sm={9}>  
-                     <Input type="text" name="item_code"  value={Master_Item.item_code} onInput={(e)=>{ setMaster_Item({...Master_Item,item_code: e.target.value}) }}  placeholder="Enter item-code" />  
-                   </Col>  
-                 </FormGroup>  
-                 <FormGroup row>  
-                   <Label for="description" sm={3}>description</Label>  
-                   <Col sm={9}>  
-                     <Input type="text" name="description" value={Master_Item.description}  onInput={(e)=>{ setMaster_Item({...Master_Item,description: e.target.value}) }} placeholder="Enter description" />  
-                   </Col>  
-                 </FormGroup>  
-                 <FormGroup row>  
-                   <Label for="retail_price" sm={3}>retail price</Label>  
-                   <Col sm={9}>  
-                     <Input type="text" name="retail_price" value={Master_Item.retail_price}  onInput={(e)=>{ setMaster_Item({...Master_Item,retail_price: e.target.value}) }} placeholder="Enter retail price" />  
-                   </Col>  
-                 </FormGroup>  
-               </Col>    
-                
+               <Col>
+                 <FormGroup row>
+                   <Label for="item_code" sm={3}>item code</Label>
+                   <Col sm={9}>
+                     <Input type="text" name="item_code"  value={Master_Item.item_code} onInput={(e)=>{ setMaster_Item({...Master_Item,item_code: e.target.value}) }}  placeholder="Enter item-code" />
+                   </Col>
+                 </FormGroup>
+                 <FormGroup row>
+                   <Label for="description" sm={3}>description</Label>
+                   <Col sm={9}>
+                     <Input type="text" name="description" value={Master_Item.description}  onInput={(e)=>{ setMaster_Item({...Master_Item,description: e.target.value}) }} placeholder="Enter description" />
+                   </Col>
+                 </FormGroup>
+                 <FormGroup row>
+                   <Label for="retail_price" sm={3}>retail price</Label>
+                   <Col sm={9}>
+                     <Input type="text" name="retail_price" value={Master_Item.retail_price}  onInput={(e)=>{ setMaster_Item({...Master_Item,retail_price: e.target.value}) }} placeholder="Enter retail price" />
+                   </Col>
+                 </FormGroup>
+               </Col>
+
         </Modal.Body>
         <Modal.Footer className="d-flex justify-content-center">
             <Button className="btn btn-success " onClick={()=> Add_New_Item() }>ADD</Button>
