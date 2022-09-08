@@ -66,15 +66,22 @@ function Index() {
         var updateItem ={
             _method :'put',
             masterFile_item_id : Master_Item.id,
-            item_code : Master_Item.item_code,
+            // item_code : Master_Item.item_code,
             description : Master_Item.description,
             retail_price : Master_Item.retail_price
         }
+		console.log("updateItem " ,updateItem);
 
         axiosIstance.post('masterFile/update',updateItem).then((res)=>{
-            getMasterFileItems()
-            handleClose_update()
-        })
+			console.log("udatep res " ,res);
+			// let updatedItems = [...MasterFile_Items].filter(i => i.id === Master_Item.id);
+			// setMasterFile_Items();
+        }).then((res)=>
+			{
+				getMasterFileItems()
+				handleClose_update()
+			}
+		)
     }
 
     const Add_New_Item = () => {
@@ -107,6 +114,9 @@ function Index() {
       }
     }
 
+	useEffect(()=> {
+		search_Item()
+	}, [MasterFile_Items])
 
     useEffect(()=> {
         getMasterFileItems()
@@ -163,7 +173,7 @@ function Index() {
                   }
                </datalist>
                <div className="col-12 py-4">
-                {search_Items.length ?   
+                {search_Items.length ?
                 <Table bordered hover size="lg">
                   <thead>
                    <tr>
@@ -178,7 +188,7 @@ function Index() {
                       {
                             search_Items.map((item)=>
                                 <tr key={item.id}>
-                                    <td>{item.id}</td>
+                                    <td>{item.item_code}</td>
                                     <td>{item.description}</td>
                                     <td>{item.retail_price}</td>
                                     <td>
@@ -247,10 +257,16 @@ function Index() {
           <Modal.Body>
 
                <Col>
+			   {/* <FormGroup row>
+					<Col sm={9}>
+					  <Input type="text" hidden name="masterFile_item_id" disabled value={Master_Item.id} onInput={(e)=>{ setMaster_Item({...Master_Item,id: Master_Item.id}) }} />
+					</Col>
+				  </FormGroup> */}
                  <FormGroup row>
+
                    <Label for="item_code" sm={3}>item code</Label>
                    <Col sm={9}>
-                     <Input type="text" name="item_code" disabled value={Master_Item.item_code} onInput={(e)=>{ setMaster_Item({...Master_Item,item_code: e.target.value}) }}  placeholder="Enter item-code" />
+                     <Input type="text" name="item_code" disabled value={Master_Item.item_code} />
                    </Col>
                  </FormGroup>
                  <FormGroup row>
