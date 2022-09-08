@@ -174,7 +174,7 @@ const handleClose_update_item = () => {
       }
       
       {warehouseItems ?
-        <WarehouseItems   show={warehouseItems} close={()=> handleClose_warehouse_items()} wareHouseItems={wareHouseItems} ></WarehouseItems> : ''
+        <WarehouseItems silp_id={silp_id}   show={warehouseItems} close={()=> handleClose_warehouse_items()} wareHouseItems={wareHouseItems} ></WarehouseItems> : ''
       }
 
 
