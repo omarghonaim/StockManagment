@@ -1,0 +1,13 @@
+.PostReceiving_wrapper
+{
+    margin-top: 8%;
+}
+.PostReceiving_wrapper h1
+{
+    margin-bottom: 40px;
+}
+.PostReceiving_wrapper input , .PostReceiving_wrapper button
+{
+    width: 50%;
+    margin-bottom: 20px;
+}

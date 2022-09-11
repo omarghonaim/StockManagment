@@ -5,6 +5,7 @@ import Login from './user/Login';
 import Header from './Header';
 import ListProduct from './WareHouse/Warehous_List';
 import MasterFile from './containers/masterfile/MasterFile';
+import PostReceiving from './components/Receiving/PostReceiving';
 import UnAuth from './Guard/UnAuth';
 import Auth from './Guard/Auth';
 import UserContextProvider from './user/userContext';
@@ -38,6 +39,10 @@ function App() {
         <Route path='/masterfile'>
           {/* <MasterFile/> */}
           <UnAuth Cmp={MasterFile} />
+        </Route>
+        <Route path='/postReceiving'>
+          {/* <MasterFile/> */}
+          <UnAuth Cmp={PostReceiving} />
         </Route>
 
         <Route path='/list'>
