@@ -48,7 +48,7 @@ const PostReceiving = () => {
 
     return (
       <React.Fragment>
-                <Modal show={show_item} onHide={handleClose}>
+                {/* <Modal show={show_item} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>{}</Modal.Title>
         </Modal.Header>
@@ -76,7 +76,7 @@ const PostReceiving = () => {
 
                 </Table>
         </Modal.Body>
-      </Modal>
+      </Modal> */}
 
         <div className='col-sm-4 offset-sm-4 PostReceiving_wrapper'>
         <h1>PostReceiving</h1>
