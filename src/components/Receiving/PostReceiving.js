@@ -1,54 +1,60 @@
-
-import React,{ useEffect, useState } from "react";
-import { Table } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import Modal from 'react-bootstrap/Modal';
-import axiosIstance from '../../Config/config';
-import Button from 'react-bootstrap/Button';
-import './PostReceiving.css'
+import React, { useEffect, useState } from "react";
+import { Table } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import Modal from "react-bootstrap/Modal";
+import axiosIstance from "../../Config/config";
+import Button from "react-bootstrap/Button";
+import "./PostReceiving.css";
 const PostReceiving = () => {
   const [data, setData] = useState([]);
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   const userToken = JSON.parse(token);
   const [show_item, setShow_item] = useState(true);
 
   const config = {
-      headers: { Authorization: `Bearer ${userToken}` }
+    headers: { Authorization: `Bearer ${userToken}` },
   };
-  async function getData(){
-      let result = await fetch("http://stockapi.ghonaim.com/api/stock/warehouses/index", config);
+  async function getData() {
+    try {
+      let result = await fetch(
+        "http://stockapi.ghonaim.com/api/stock/warehouses/index",
+        config
+      );
       result = await result.json();
       console.log(result);
       setData(result.data);
+    } catch (error) {}
   }
 
   const handleClose = () => {
-      setShow_item(false)};
-  
-  useEffect(async ()=> {
-          getData()
-  }, [])
-  const [receivingSlip_id, setReceivingSlip_id] = useState('');
-  const [resMsg, setResMsg] = useState('');
-    var slip ={
-        _method :'put',
-        receivingSlip_id:receivingSlip_id
-    }
-  const PostSlip =()=>{
-    axiosIstance.post(`receivingSlips/post`,slip).then(res=>{
-      console.log("rec slip res", res);
-      setResMsg(res.data.message);
-    })
-  }
-  
+    setShow_item(false);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+  const [receivingSlip_id, setReceivingSlip_id] = useState("");
+  const [resMsg, setResMsg] = useState("");
+  var slip = {
+    _method: "put",
+    receivingSlip_id: receivingSlip_id,
+  };
+  const PostSlip = () => {
+    try {
+      axiosIstance.post(`receivingSlips/post`, slip).then((res) => {
+        console.log("rec slip res", res);
+        setResMsg(res.data.message);
+      });
+    } catch (error) {}
+  };
+
   // useEffect(() => {
   // getItemDetails()
   // },[])
 
-
-    return (
-      <React.Fragment>
-                {/* <Modal show={show_item} onHide={handleClose}>
+  return (
+    <React.Fragment>
+      {/* <Modal show={show_item} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>{}</Modal.Title>
         </Modal.Header>
@@ -78,18 +84,26 @@ const PostReceiving = () => {
         </Modal.Body>
       </Modal> */}
 
-        <div className='col-sm-4 offset-sm-4 PostReceiving_wrapper'>
+      <div className="col-sm-4 offset-sm-4 PostReceiving_wrapper">
         <h1>PostReceiving</h1>
-            <div className='row justify-content-center'>
-
-            <input className="form-control mx-1" list="datalistOptions" type="number" onInput={(e)=>{setReceivingSlip_id(e.target.value)}} placeholder="Enter Reciving Slip Id"></input>
-            <Button className='btn btn-primary mb-3'onClick={PostSlip} >Post</Button>
-            </div>
-            {resMsg ? <h5>{resMsg}</h5> : ''}
+        <div className="row justify-content-center">
+          <input
+            className="form-control mx-1"
+            list="datalistOptions"
+            type="number"
+            onInput={(e) => {
+              setReceivingSlip_id(e.target.value);
+            }}
+            placeholder="Enter Reciving Slip Id"
+          ></input>
+          <Button className="btn btn-primary mb-3" onClick={PostSlip}>
+            Post
+          </Button>
         </div>
-
-      </React.Fragment>      
-    );
-}
+        {resMsg ? <h5>{resMsg}</h5> : ""}
+      </div>
+    </React.Fragment>
+  );
+};
 
 export default PostReceiving;
