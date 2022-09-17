@@ -1,6 +1,6 @@
 import { useContext, useState, useSyncExternalStore } from "react";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
-import { Link, useHistory } from "react-router-dom";
+import { Link, NavLink, useHistory } from "react-router-dom";
 import { UserContext } from "./user/userContext";
 import "./header.css";
 
@@ -26,13 +26,28 @@ function Header() {
             <>
               {/* <Link to="/add">add product</Link>
                                 <Link to="/update">update product</Link> */}
-              <Link to="/masterfile">MasterFile</Link>
-              <Link to="/list">StockCard</Link>
-              <Link to="/postReceiving">Receiving</Link>
+              <NavLink
+                to="/masterfile"
+                className={(isActive) => (isActive ? "" : "unselectedLink")}
+              >
+                MasterFile
+              </NavLink>
+              <NavLink
+                to="/list"
+                className={(isActive) => (isActive ? "" : "unselectedLink")}
+              >
+                StockCard
+              </NavLink>
+              <NavLink
+                to="/postReceiving"
+                className={(isActive) => (isActive ? "" : "unselectedLink")}
+              >
+                Receiving
+              </NavLink>
             </>
           ) : (
             <>
-              <Link to="/login">login</Link>
+              <NavLink to="/login">login</NavLink>
             </>
           )}
         </Nav>
