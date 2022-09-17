@@ -40,13 +40,7 @@ function Login() {
         history.push("/login");
       } else {
         if (result.code === 200) {
-          tokenContext.setLogged(true);
-          localStorage.setItem(
-            "token",
-            JSON.stringify(result.data[0].access_token)
-          );
-
-          history.push("/masterfile");
+          handleLoggedSuccessfully(result);
         } else {
           setErrorMessage(result.message);
         }
@@ -56,6 +50,13 @@ function Login() {
       setIsLoading(false);
     }
   }
+
+  function handleLoggedSuccessfully(result) {
+    tokenContext.setLogged(true);
+    localStorage.setItem("token", JSON.stringify(result.data[0].access_token));
+    history.push("/masterfile");
+  }
+
   return (
     <>
       {/* <Header /> */}
