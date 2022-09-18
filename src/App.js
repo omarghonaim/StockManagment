@@ -10,6 +10,8 @@ import UnAuth from './Guard/UnAuth';
 import Auth from './Guard/Auth';
 import UserContextProvider from './user/userContext';
 import WarehouseDetails from './WareHouse/Warehouse_Details';
+import WarehouseReceivig from './components/Receiving/WarehouseReceivig';
+
 import './App.css';
 
 
@@ -43,6 +45,10 @@ function App() {
         <Route path='/postReceiving'>
           {/* <MasterFile/> */}
           <UnAuth Cmp={PostReceiving} />
+        </Route>
+        <Route path='/postReceiving/warehouse/:id'>
+          {/* <MasterFile/> */}
+          <UnAuth Cmp={WarehouseReceivig} />
         </Route>
 
         <Route path='/list'>

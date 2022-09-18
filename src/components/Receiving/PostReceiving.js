@@ -48,7 +48,7 @@ const PostReceiving = () => {
 
     return (
       <React.Fragment>
-                {/* <Modal show={show_item} onHide={handleClose}>
+                <Modal show={show_item} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>{}</Modal.Title>
         </Modal.Header>
@@ -67,7 +67,7 @@ const PostReceiving = () => {
                                     <td>{item.id}</td>
                                     <td>{item.name}</td>
                                     <td>{item.is_active}</td>
-                                    <td><Link to={`/warehouse/${item.id}`} > <Button className='m-1'>Show warehouse</Button></Link>
+                                    <td><Link to={`/postReceiving/warehouse/${item.id}`} onClick={handleClose} > <Button className='m-1' >Show warehouse</Button></Link>
                                      
                                      </td>
                                 </tr>
@@ -76,7 +76,7 @@ const PostReceiving = () => {
 
                 </Table>
         </Modal.Body>
-      </Modal> */}
+      </Modal>
 
         <div className='col-sm-4 offset-sm-4 PostReceiving_wrapper'>
         <h1>PostReceiving</h1>

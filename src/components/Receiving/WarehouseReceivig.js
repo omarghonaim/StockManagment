@@ -1,18 +1,17 @@
 import React,{ useState, useEffect} from 'react';
-import axiosIstance from '../Config/config';
+import axiosIstance from '../../Config/config';
 import { useParams } from "react-router"
-import Header from "../Header"
 import { Table } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import ReactLoader from 'react-loader';
-import SilpDetails from '../components/Silps/Silp_Details'
+import SilpDetails from '../../components/Silps/Silp_Details'
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 
 
-const WarehouseDetails = () => {
+const WarehouseReceivig = () => {
 
     const [loader, setLoader] = useState(true)
     const [warehouse, setWarehouse]= useState({})
@@ -31,7 +30,6 @@ const WarehouseDetails = () => {
 	const [slip, setSlip] = useState({});
 	const [add_slip, setAdd_slip] = useState(false);
 	////////////////////////////////////////
-	const [movements, setMovements] = useState('');
 
 
     const handleClose = () => {
@@ -166,9 +164,15 @@ const WarehouseDetails = () => {
       })
     }
 
-  
 
 
+
+    useEffect(()=> {
+        getWarehouse()
+        getWarehouseItems()
+        getSilpssOfWarehouse()
+        setAttach_Item_Form({...attach_Item_Form,warehouse_id:params.id})
+    },[])
 
 	const handleShow_addSlip = () => {
 		setAdd_slip(true);
@@ -189,35 +193,12 @@ const WarehouseDetails = () => {
         })
 
 	};
-    const getWarehoueItemsMovements = (item)=>{
-        console.log("moveee",item)
-        var itemMovements ={
-            warehouse_item_id: warehouse_Item.id,
-            dateFrom:'6-9-2022',
-            dateTo:'7-9-2022',
-            userId: warehouse_Item.createdBy_id
-  
-        }
-        axiosIstance.post('warehouseItems/itemMovements',itemMovements ).then(response=>{
-          console.log("itemMovements",response.data)
-          setMovements(response.data.data)
-        })
-      }
-      
-
-    useEffect(()=> {
-        getWarehouse()
-        getWarehouseItems()
-        getSilpssOfWarehouse()
-        getWarehoueItemsMovements()
-        setAttach_Item_Form({...attach_Item_Form,warehouse_id:params.id})
-    },[])
     return (
         <React.Fragment>
             <div className=' my-3'>
                 <h1>{warehouse.name} <span className={` badge ${warehouse.is_active ? "text-bg-success" : "text-bg-danger"} `}>{warehouse.is_active? 'Active' : 'Disabled'}</span></h1>
                 <p> created at : {warehouse.created_at}</p>
-                <Button className='mx-1' onClick={()=>handleShow_list()}>Add Item to warehouse</Button>
+                {/* <Button className='mx-1' onClick={()=>handleShow_list()}>Add Item to warehouse</Button> */}
 				<Button  className='mx-1' onClick={()=>handleShow_addSlip()}>Add Slip</Button>
 
             </div>
@@ -225,47 +206,8 @@ const WarehouseDetails = () => {
             <div className='row  justify-content-center'>
 
             <Tabs defaultActiveKey="items"  id="justify-tab-example" className="my-3 col-12" justify >
-              <Tab eventKey="items" title="Warehouse Items">
-              <h2>warehouse items</h2>
-              <div className="row">
-                <div className='col-12 px-5'>
-                <Table bordered hover size="lg">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>WareHouseItem_ID</th>
-                        <th>Description</th>
-                        <th>Price</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                {
-                    items.map((item,index)=>{
-                        return (
-                            <tr key={index}>
-                               <td>{item.id}</td>
-                               <td>{item.masterFile_item_id}</td>
-                               <td>{item.description}</td>
-                               <td>{item.retail_price}</td>
-                               <td>
-                                <div className='d-flex'>
-                                <Button className='m-1' onClick={()=> handleShow(item.id)}>Details</Button>
-                                <Button className='m-1' onClick={()=> handleShow_Location(item) }> Update </Button>
-
-                                </div>
-                               </td>
-                            </tr>
-                        )
-                    })
-                }
-                </tbody>
-                </Table>
-                 </div>
-              </div>
-
-              </Tab>
-              {/* <Tab eventKey="movements" title="Warehouse Items movements">
+            <Tab>
+              {/* <Tab eventKey="items" title="Warehouse Items">
               <h2>warehouse items</h2>
               <div className="row">
                 <div className='col-12 px-5'>
@@ -302,8 +244,10 @@ const WarehouseDetails = () => {
                 </Table>
                  </div>
               </div>
+
               </Tab> */}
-              {/* <Tab eventKey="silps" title=" WareHouse Silps">
+              </Tab>
+              <Tab eventKey="silps" title=" WareHouse Silps">
              <div className="row">
               <div className='col-12 px-5'>
                  <Table bordered hover size="lg">
@@ -345,9 +289,9 @@ const WarehouseDetails = () => {
              </div>
               </Tab>
    
-            </Tabs> */}
+            </Tabs>
                  
-                 </Tabs>
+
 
             </div>
 
@@ -387,12 +331,8 @@ const WarehouseDetails = () => {
                   <td>{warehouse_Item.masterFile_item_id}</td>
                 </tr>
             </Table>
-            <Button className='m-1' onClick={()=> getWarehoueItemsMovements(warehouse_Item) }> movements </Button>
-
         </Modal.Body>
       </Modal>
-
-
 
 
       <Modal show={show_item_list} onHide={handleClose_List}>
@@ -417,13 +357,6 @@ const WarehouseDetails = () => {
         </Modal.Footer>
       </Modal>
 
-
-
-
-
-
-
-
       <Modal show={show_Location} onHide={handleClose_Location}>
         <Modal.Header closeButton>
           <Modal.Title>Update Item Location </Modal.Title>
@@ -438,16 +371,6 @@ const WarehouseDetails = () => {
             <Button className="btn btn-success " onClick={()=> updateLocation()}>Update Location</Button>
         </Modal.Footer>
       </Modal>
-
-
-
-
-
-
-
-
-
-
 	  <Modal show={add_slip} onHide={handleClose_addSlip}>
         <Modal.Header closeButton>
           <Modal.Title>Store Slip </Modal.Title>
@@ -475,4 +398,4 @@ const WarehouseDetails = () => {
     );
 }
 
-export default WarehouseDetails;
+export default WarehouseReceivig;
