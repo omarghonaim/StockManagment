@@ -9,11 +9,7 @@
 .navbar_wrapper a {
   padding-left: 20px;
 }
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
+
 
 .App-header {
   background-color: #282c34;
@@ -26,15 +22,19 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+
+
+.labelsStyle{
+  font-size: 23px;
+ text-align: start;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.unselectedLink{
+  color: rgb(194, 188, 188) !important;
+}
+
+.centerSpinner {
+  position: absolute;
+    top: 47%;
+    left: 47%;
 }
