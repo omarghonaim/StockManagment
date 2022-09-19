@@ -213,19 +213,20 @@ const WarehouseDetails = () => {
         <Button className="mx-1" onClick={() => handleShow_list()}>
           Add Item to warehouse
         </Button>
-        <Button className="mx-1" onClick={() => handleShow_addSlip()}>
+        {/* <Button className="mx-1" onClick={() => handleShow_addSlip()}>
           Add Slip
-        </Button>
+        </Button> */}
       </div>
 
       <div className="row  justify-content-center">
-        <Tabs
+        <Tabs 
+         active={items}
           defaultActiveKey="items"
           id="justify-tab-example"
           className="my-3 col-12 "
           justify
         >
-          <Tab eventKey="items" title="Warehouse Items">
+          <Tab eventKey="items" title="Item Info">
             <div className="row  bg-white">
               <div className="col-12 px-5">
                 <Table bordered hover size="lg">
@@ -271,7 +272,7 @@ const WarehouseDetails = () => {
               </div>
             </div>
           </Tab>
-          <Tab eventKey="silps" title=" WareHouse Silps">
+          {/* <Tab eventKey="silps" title=" WareHouse Silps">
             <div className="row  bg-white">
               <div className="col-12 px-5 ">
                 <Table bordered hover size="lg">
@@ -323,8 +324,8 @@ const WarehouseDetails = () => {
                 </Table>
               </div>
             </div>
-          </Tab>
-        </Tabs>
+          </Tab>*/}
+        </Tabs> 
       </div>
 
       <Modal show={show_item} onHide={handleClose}>
