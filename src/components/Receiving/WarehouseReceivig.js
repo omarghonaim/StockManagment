@@ -205,7 +205,7 @@ const WarehouseReceivig = () => {
 
             <div className='row  justify-content-center'>
 
-            <Tabs defaultActiveKey="items"  id="justify-tab-example" className="my-3 col-12" justify >
+            <Tabs defaultActiveKey="silps"  id="justify-tab-example" className="my-3 col-12" justify  active={silps}>
             <Tab>
               {/* <Tab eventKey="items" title="Warehouse Items">
               <h2>warehouse items</h2>
@@ -247,7 +247,7 @@ const WarehouseReceivig = () => {
 
               </Tab> */}
               </Tab>
-              <Tab eventKey="silps" title=" WareHouse Silps">
+              <Tab eventKey="silps" title="Detials">
              <div className="row">
               <div className='col-12 px-5'>
                  <Table bordered hover size="lg">
