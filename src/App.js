@@ -32,11 +32,6 @@ function App() {
             <Auth Cmp={Login} />
           </Route>
 
-          {/* <Route path='/register'>
-        <Auth Cmp={Register}/>
-        </Route> */}
-
-<<<<<<< movements
         <Route path='/'>
           <Redirect to='/masterfile' />
         </Route>
@@ -65,31 +60,6 @@ function App() {
     </BrowserRouter>
 	</UserContextProvider>
     </div >
-=======
-          <Route path="/">
-            <Redirect to="/masterfile" />
-          </Route>
-
-          <Route path="/masterfile">
-            {/* <MasterFile/> */}
-            <UnAuth Cmp={MasterFile} />
-          </Route>
-          <Route path="/postReceiving">
-            {/* <MasterFile/> */}
-            <UnAuth Cmp={PostReceiving} />
-          </Route>
-
-          <Route path="/list">
-            <UnAuth Cmp={ListProduct} />
-          </Route>
-
-          <Route path="/warehouse/:id">
-            <UnAuth Cmp={WarehouseDetails} />
-          </Route>
-        </BrowserRouter>
-      </UserContextProvider>
-    </div>
->>>>>>> master
   );
 }
 

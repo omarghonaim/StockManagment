@@ -52,16 +52,10 @@ const PostReceiving = () => {
   // getItemDetails()
   // },[])
 
-<<<<<<< movements
 
     return (
       <React.Fragment>
                 <Modal show={show_item} onHide={handleClose}>
-=======
-  return (
-    <React.Fragment>
-      {/* <Modal show={show_item} onHide={handleClose}>
->>>>>>> master
         <Modal.Header closeButton>
           <Modal.Title>{}</Modal.Title>
         </Modal.Header>
