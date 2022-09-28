@@ -4,6 +4,7 @@ import { useParams } from "react-router"
 import { Table } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import Form from 'react-bootstrap/Form';
 import ReactLoader from 'react-loader';
 import SilpDetails from '../../components/Silps/Silp_Details'
@@ -30,7 +31,9 @@ const WarehouseReceivig = () => {
 	const [slip, setSlip] = useState({});
 	const [add_slip, setAdd_slip] = useState(false);
 	////////////////////////////////////////
-
+	const [openSlip, setOpenSlip] = useState(false);
+    const [loadedSlip, setLoadedSlip] = useState('');
+    const [slipId, setSlipId] = useState('');
 
     const handleClose = () => {
         setWarehouse_Item({})
@@ -180,7 +183,11 @@ const WarehouseReceivig = () => {
    const handleClose_addSlip = () => {
         	setAdd_slip(false)};
 
-	const cancelSlip = (id) => {
+           
+     const  handleClose_openSlip = () => {
+                setOpenSlip(false)};
+    
+const cancelSlip = (id) => {
 
         var canceledSlip ={
             _method :"put",
@@ -191,62 +198,52 @@ const WarehouseReceivig = () => {
             console.log('update >>>>>>>', res)
 			getSilpssOfWarehouse();
         })
-
 	};
+
+ const Search_slip = (slipid) =>{
+            // var load_slip = 
+            // {
+            //     // warehouse_id :params.id,
+            //     receiving_slip_id :slipid,
+            // }
+            try {
+                axiosIstance.get(`receivingSlips/${slipid}`).then((res)=>{
+                    if(res.data.data.length == 0){
+                        setLoadedSlip('');
+                    }
+                    console.log(res.data.data)
+                    console.log('before', loadedSlip)
+                    setLoadedSlip(res.data.data)
+                    console.log('after', loadedSlip)
+                  })
+              } catch (error) {
+                setLoadedSlip('');
+              }
+    
+ };
     return (
         <React.Fragment>
-            <div className=' my-3'>
+            {/* <div className=' my-3'>
                 <h1>{warehouse.name} <span className={` badge ${warehouse.is_active ? "text-bg-success" : "text-bg-danger"} `}>{warehouse.is_active? 'Active' : 'Disabled'}</span></h1>
                 <p> created at : {warehouse.created_at}</p>
-                {/* <Button className='mx-1' onClick={()=>handleShow_list()}>Add Item to warehouse</Button> */}
 				<Button  className='mx-1' onClick={()=>handleShow_addSlip()}>Add Slip</Button>
 
-            </div>
+            </div> */}
 
-            <div className='row  justify-content-center'>
+            <div className='row  justify-content-center post_nav'>
+            <Navbar>
+                    <Button className='m-3' onClick={()=>setOpenSlip(true)} >open</Button>
+                    <Button className='m-3' >new</Button>
+                    <Button className='m-3' >save</Button>
+                    <Button className='m-3' >cancel</Button>
+                    <Button className='m-3' >post</Button>
+                    <Button className='m-3' >reprint</Button>
+                    <Button className='m-3' >exit</Button>
 
-            <Tabs defaultActiveKey="silps"  id="justify-tab-example" className="my-3 col-12" justify  active={silps}>
-            <Tab>
-              {/* <Tab eventKey="items" title="Warehouse Items">
-              <h2>warehouse items</h2>
-              <div className="row">
-                <div className='col-12 px-5'>
-                <Table bordered hover size="lg">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>WareHouseItem_ID</th>
-                        <th>Description</th>
-                        <th>Price</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                {
-                    items.map((item,index)=>{
-                        return (
-                            <tr key={index}>
-                               <td>{item.id}</td>
-                               <td>{item.masterFile_item_id}</td>
-                               <td>{item.description}</td>
-                               <td>{item.retail_price}</td>
-                               <td>
-                                <div className='d-flex'>
-                                <Button className='m-1' onClick={()=> handleShow(item.id)}>Details</Button>
-                                <Button className='m-1' onClick={()=> handleShow_Location(item) }> Update </Button>
-                                </div>
-                               </td>
-                            </tr>
-                        )
-                    })
-                }
-                </tbody>
-                </Table>
-                 </div>
-              </div>
 
-              </Tab> */}
-              </Tab>
+
+              </Navbar>
+            {/* <Tabs defaultActiveKey="silps"  id="justify-tab-example" className="my-3 col-12" justify  active={silps}>
               <Tab eventKey="silps" title="Detials">
              <div className="row">
               <div className='col-12 px-5'>
@@ -289,7 +286,7 @@ const WarehouseReceivig = () => {
              </div>
               </Tab>
    
-            </Tabs>
+            </Tabs> */}
                  
 
 
@@ -371,6 +368,9 @@ const WarehouseReceivig = () => {
             <Button className="btn btn-success " onClick={()=> updateLocation()}>Update Location</Button>
         </Modal.Footer>
       </Modal>
+
+
+
 	  <Modal show={add_slip} onHide={handleClose_addSlip}>
         <Modal.Header closeButton>
           <Modal.Title>Store Slip </Modal.Title>
@@ -390,10 +390,70 @@ const WarehouseReceivig = () => {
         </Modal.Footer>
       </Modal>
 
+
+
+      <Modal show={openSlip} onHide={handleClose_openSlip}>
+        <Modal.Header closeButton>
+          <Modal.Title>search slips</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+		   <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+             <Form.Label>Slip Id</Form.Label>
+             <Form.Control value={slip.PO_number} onInput={ (e)=> setSlipId( e.target.value) }   type="Text" placeholder="Enter Po Number" />
+           </Form.Group>
+        </Modal.Body>
+        <Modal.Footer className="d-flex justify-content-center">
+            <Button className="btn btn-success " onClick={()=> Search_slip(slipId)}>search</Button>
+        </Modal.Footer>
+      </Modal>
+      { (loadedSlip.length > 0) ? 
+        <div className="row">
+        <div className='col-12 px-5'>
+           <Table bordered hover size="lg">
+              <thead>
+              <tr>
+                  <th>ID</th>
+                  <th>PO_number</th>
+                  <th>Supplier Name</th>
+                  <th>Status</th>
+                  <th>Created_at</th>
+                  <th>Actions</th>
+              </tr>
+
+              </thead>
+              <tbody>
+              {
+              loadedSlip.map((silp,index)=>{
+                  return (
+                      <tr key={index}>
+                         <td>{silp.id}</td>
+                         <td>{silp.PO_number}</td>
+                         <td>{silp.supplier_name}</td>
+                         <td>{silp.status}</td>
+                         <td>{silp.created_at}</td>
+                         <td>
+                          <div className='d-flex'>
+                          <Button className='m-1' onClick={()=> {setSilp_detail_id(silp.id);setSilp_detail(true);}}>Details</Button>
+                          <Button className='m-1' onClick={()=> {cancelSlip(silp.id)} }> Cancel</Button>
+                          </div>
+                         </td>
+                      </tr>
+                  )
+              })
+          }
+
+              </tbody>
+           </Table>
+           </div>
+       </div>
+      : ''
+      }
       {silp_detail ? 
         <SilpDetails show={silp_detail} silp_id={silp_detail_id}  handleClose={()=> setSilp_detail(false)} warehouse_id={params.id} wareHouseItems={items} ></SilpDetails>
 
         :''}
+
+
         </React.Fragment>
     );
 }

@@ -13,3 +13,13 @@
     color: #ffffff;
     text-decoration: none;
 }
+.post_nav
+{
+    margin-top: 10px;
+    background-color: #23293d !important;
+    color: #ffffff !important;
+}
+.post_nav .btn-primary
+{
+    width: 9% !important;
+}

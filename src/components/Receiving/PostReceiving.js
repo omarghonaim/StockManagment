@@ -84,10 +84,10 @@ const PostReceiving = () => {
                 </Table>
         </Modal.Body>
       </Modal>
-
+{/* 
       <div className="col-sm-4 offset-sm-4 PostReceiving_wrapper">
-        <h1>PostReceiving</h1>
-        <div className="row justify-content-center">
+        <h1>PostReceiving</h1> */}
+        {/* <div className="row justify-content-center">
           <input
             className="form-control mx-1"
             list="datalistOptions"
@@ -100,9 +100,9 @@ const PostReceiving = () => {
           <Button className="btn btn-primary mb-3" onClick={PostSlip}>
             Post
           </Button>
-        </div>
-        {resMsg ? <h5>{resMsg}</h5> : ""}
-      </div>
+        </div> */}
+        {/* {resMsg ? <h5>{resMsg}</h5> : ""} */}
+      {/* </div> */}
     </React.Fragment>
   );
 };
