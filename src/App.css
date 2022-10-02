@@ -38,3 +38,11 @@
     top: 47%;
     left: 47%;
 }
+
+.error{
+  color: red;
+}
+
+.bg-white{
+  background-color: white;
+}
