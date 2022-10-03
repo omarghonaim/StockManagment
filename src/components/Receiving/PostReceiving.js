@@ -35,18 +35,18 @@ const PostReceiving = () => {
   }, []);
   const [receivingSlip_id, setReceivingSlip_id] = useState("");
   const [resMsg, setResMsg] = useState("");
-  var slip = {
-    _method: "put",
-    receivingSlip_id: receivingSlip_id,
-  };
-  const PostSlip = () => {
-    try {
-      axiosIstance.post(`receivingSlips/post`, slip).then((res) => {
-        console.log("rec slip res", res);
-        setResMsg(res.data.message);
-      });
-    } catch (error) {}
-  };
+  // var slip = {
+  //   _method: "put",
+  //   receivingSlip_id: receivingSlip_id,
+  // };
+  // const PostSlip = () => {
+  //   try {
+  //     axiosIstance.post(`receivingSlips/post`, slip).then((res) => {
+  //       console.log("rec slip res", res);
+  //       setResMsg(res.data.message);
+  //     });
+  //   } catch (error) {}
+  // };
 
   // useEffect(() => {
   // getItemDetails()

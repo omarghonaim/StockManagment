@@ -31,10 +31,28 @@ const WarehouseReceivig = () => {
   // const [silp_detail_id, setSilp_detail_id] = useState(0);
   const [slip, setSlip] = useState({});
   const [add_slip, setAdd_slip] = useState(false);
-  ////////////////////////////////////////
+  ///////////////////open button/////////////////////
   const [openSlip, setOpenSlip] = useState(false);
   const [loadedSlip, setLoadedSlip] = useState("");
   const [slipId, setSlipId] = useState("");
+
+  ///////////////////new button/////////////////////
+  const [showNew, setShowNew] = useState(false);
+
+  ///////////////////save button/////////////////////
+  const [saveNew, setSaveNew] = useState(false);
+  const [savedNewResp, setSavedNewResp] = useState('');
+
+
+  ///////////////////Cancel button/////////////////////
+  const [cancelSlipBtn, setCancelSlipBtn] = useState(false);
+  const [canceledSlipId, setCanceledSlipId] = useState('');
+
+  ///////////////////Post button/////////////////////
+  const [postSlipBtn, setPostSlipBtn] = useState(false);
+  const [receivingSlip_id, setReceivingSlip_id] = useState("");
+  const [resMsg, setResMsg] = useState("");
+
   // Error states
   const [searchSlipError, setSearchSlipError] = useState(null);
   // Loaders states
@@ -158,15 +176,17 @@ const WarehouseReceivig = () => {
   };
 
   const addSlip = () => {
-    var NewItem = {
+    var NewSlip = {
       warehouse_id: params.id,
       PO_number: slip.PO_number,
       supplier_name: slip.supplier_name,
     };
 
-    axiosIstance.post("receivingSlips/store", NewItem).then((res) => {
+    axiosIstance.post("receivingSlips/store", NewSlip).then((res) => {
+      console.log('saved slip' ,res)
       getSilpssOfWarehouse();
       handleClose_addSlip();
+      return res;
     });
   };
   const getSilpssOfWarehouse = () => {
@@ -191,22 +211,16 @@ const WarehouseReceivig = () => {
   const handleClose_addSlip = () => {
     setAdd_slip(false);
   };
+  const handleClose_cancelSlip = () => {
+    setCancelSlipBtn(false);
+  };
+
 
   const handleClose_openSlip = () => {
     setOpenSlip(false);
   };
 
-  const cancelSlip = (id) => {
-    var canceledSlip = {
-      _method: "put",
-      receivingSlip_id: id,
-      status: "Canceled",
-    };
-    axiosIstance.post("receivingSlips/update", canceledSlip).then((res) => {
-      console.log("update >>>>>>>", res);
-      getSilpssOfWarehouse();
-    });
-  };
+
 
   const Search_slip = (slipId) => {
     if (!slipId) {
@@ -232,11 +246,57 @@ const WarehouseReceivig = () => {
       setSearchSlipError("Error !!");
     }
   };
-
+  // new slip header
+const handleShowNew = () => { 
+  setShowNew(true)
+}  
+//TODO Remove loaded slip data
   const handleNewButton = () => {
-    //TODO Remove loaded slip data
     handleShow_addSlip(true);
     setLoadedSlip("");
+  };
+   // save slip header
+  const handleSaveNew = () => { 
+    setSaveNew(true)
+  }
+  const handleSavNewSlip = () => { 
+    if(saveNew){
+      (addSlip())
+    }
+  }
+   // Cancel slip 
+  const handleCnacelSlip = () => { 
+    setCancelSlipBtn(true)
+  }
+  const cancelSlip = (id) => {
+    var canceledSlip = {
+      _method: "put",
+      receivingSlip_id: id,
+      status: "Canceled",
+    };
+    axiosIstance.post("receivingSlips/update", canceledSlip).then((res) => {
+      console.log("update >>>>>>>", res);
+      // getSilpssOfWarehouse();
+    });
+  };
+   // Post slip 
+   const handlePostSlip = () => { 
+    setPostSlipBtn(true)
+  }
+  const handleClose_postSlip = () => { 
+    setPostSlipBtn(false)
+  }
+  const PostSlip = () => {
+    var slip = {
+      _method: "put",
+      receivingSlip_id: receivingSlip_id,
+    };
+    try {
+      axiosIstance.post(`receivingSlips/post`, slip).then((res) => {
+        console.log("rec slip res", res);
+        setResMsg(res.data.message);
+      });
+    } catch (error) {}
   };
   return (
     <React.Fragment>
@@ -252,12 +312,12 @@ const WarehouseReceivig = () => {
           <Button className="m-3" onClick={() => setOpenSlip(true)}>
             open
           </Button>
-          <Button className="m-3" onClick={handleNewButton}>
+          <Button className="m-3" onClick={() => {handleNewButton(); handleShowNew(true); }}>
             new
           </Button>
-          <Button className="m-3">save</Button>
-          <Button className="m-3">cancel</Button>
-          <Button className="m-3">post</Button>
+          <Button className="m-3" onClick={() => {handleSaveNew(); handleSavNewSlip();}}>save</Button>
+          <Button className="m-3" onClick={() => handleCnacelSlip()}>cancel</Button>
+          <Button className="m-3"  onClick={() => handlePostSlip() }>post</Button>
           <Button className="m-3">reprint</Button>
           <Button className="m-3">exit</Button>
         </Navbar>
@@ -401,7 +461,63 @@ const WarehouseReceivig = () => {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={add_slip} onHide={handleClose_addSlip}>
+
+       <Modal show={cancelSlipBtn} onHide={handleClose_cancelSlip}>
+        <Modal.Header closeButton>
+          <Modal.Title>Cancel Slip </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label>Slip Id</Form.Label>
+            <Form.Control
+              value={canceledSlipId}
+              onInput={(e) => {
+                setCanceledSlipId( e.target.value );
+              }}
+              type="Text"
+              placeholder="Enter slip id"
+            />
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer className="d-flex justify-content-center">
+          <Button className="btn btn-success " onClick={() => cancelSlip(canceledSlipId)}>
+            Cancel Slip
+          </Button>
+        </Modal.Footer>
+      </Modal> 
+      
+
+          {/* post slip */}
+  <Modal show={postSlipBtn} onHide={handleClose_postSlip}>
+        <Modal.Header closeButton>
+          <Modal.Title>Post Slip </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label>receivingSlip Id to post</Form.Label>
+            <Form.Control
+              value={receivingSlip_id}
+              onInput={(e) => {
+                setReceivingSlip_id( e.target.value);
+              }}
+              type="Text"
+              placeholder="Enter Id"
+            />
+          </Form.Group>
+          {resMsg ? resMsg : ''} <br></br>
+        </Modal.Body>
+        <Modal.Footer className="d-flex justify-content-center">
+          
+          <Button className="btn btn-success " onClick={() => PostSlip()}>
+            post Slip
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+
+
+
+      {/* <Modal show={add_slip} onHide={handleClose_addSlip}>
         <Modal.Header closeButton>
           <Modal.Title>Store Slip </Modal.Title>
         </Modal.Header>
@@ -434,8 +550,10 @@ const WarehouseReceivig = () => {
             add Slip
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
 
+
+         {/* openSlip slip */}
       <Modal show={openSlip} onHide={handleClose_openSlip}>
         <Modal.Header closeButton>
           <Modal.Title>search slips</Modal.Title>
@@ -480,6 +598,41 @@ const WarehouseReceivig = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+
+
+      {/* new slip */}
+      {showNew ? (
+        <div className="row">
+          <div className="col-12 px-5">
+            <caption>Receiving</caption>
+            <Table bordered hover size="lg" className="bg-white">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Serial</th>
+                  <th>PO_number</th>
+                  <th>Supplier Name</th>
+                  <th>Status</th>
+                  <th>Created_at</th>
+                  <th>Created_by</th>
+                  {/**<th>Actions</th>*/}
+                </tr>
+              </thead>
+                      <td></td>
+                      <td></td>
+                      <td><Form.Control value={slip.PO_number} onInput={(e) => {setSlip({ ...slip, PO_number: e.target.value });}} type="Text" placeholder="Enter Po Number"/></td>
+                      <td><Form.Control value={slip.supplier_name} onInput={(e) => {setSlip({ ...slip, supplier_name: e.target.value });}} type="Text" placeholder="Enter Supplier Name "/></td>
+                      <td>new</td>
+                      <td></td>
+                      <td></td>
+            </Table>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+      {/* searched slip */}
       {loadedSlip.length > 0 ? (
         <div className="row">
           <div className="col-12 px-5">
