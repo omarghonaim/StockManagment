@@ -10,6 +10,7 @@ import ReactLoader from "react-loader";
 
 import Spinner from "react-bootstrap/Spinner";
 import SlipItems from "../Silps/SlipItems";
+import WarehouseItems from '../Silps/WarehouseItems';
 
 const WarehouseReceivig = () => {
   const [loader, setLoader] = useState(true);
@@ -42,6 +43,9 @@ const WarehouseReceivig = () => {
   ///////////////////save button/////////////////////
   const [saveNew, setSaveNew] = useState(false);
   const [savedNewResp, setSavedNewResp] = useState('');
+  const [slipSaved, setSlipSaved] = useState(false);
+  const [slipSavedCode, setSlipSavedCode] = useState('');
+
 
 
   ///////////////////Cancel button/////////////////////
@@ -186,7 +190,7 @@ const WarehouseReceivig = () => {
       console.log('saved slip' ,res)
       getSilpssOfWarehouse();
       handleClose_addSlip();
-      return res;
+      setSlipSavedCode(res.data.code)
     });
   };
   const getSilpssOfWarehouse = () => {
@@ -260,8 +264,14 @@ const handleShowNew = () => {
     setSaveNew(true)
   }
   const handleSavNewSlip = () => { 
+    // const result = {};
     if(saveNew){
-      (addSlip())
+      addSlip();
+      console.log('res inside el if el awel' ,slipSavedCode);
+      // console.log('res inside el if' , result);
+      if(slipSavedCode === 200){
+        setSlipSaved(true)
+      }
     }
   }
    // Cancel slip 
@@ -623,11 +633,15 @@ const handleShowNew = () => {
                       <td></td>
                       <td><Form.Control value={slip.PO_number} onInput={(e) => {setSlip({ ...slip, PO_number: e.target.value });}} type="Text" placeholder="Enter Po Number"/></td>
                       <td><Form.Control value={slip.supplier_name} onInput={(e) => {setSlip({ ...slip, supplier_name: e.target.value });}} type="Text" placeholder="Enter Supplier Name "/></td>
-                      <td>new</td>
+                      <td></td>
                       <td></td>
                       <td></td>
             </Table>
           </div>
+           {/* { slipSaved ? <button onClick={}>add items</button> : '' } */}
+          {/* { slipSaved ? <SlipItems warehouseId={params.id} receivingSlipId={''} /> : '' } */}
+          {/* {slipSaved ? <WarehouseItems show={slipSaved} wareHouseItems={items}  silp_id={77} /> : ''} */}
+          
         </div>
       ) : (
         ""
