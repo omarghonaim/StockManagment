@@ -10,12 +10,14 @@ import ReactLoader from "react-loader";
 
 import Spinner from "react-bootstrap/Spinner";
 import SlipItems from "../Silps/SlipItems";
-import WarehouseItems from '../Silps/WarehouseItems';
+import WarehouseItems from "../Silps/WarehouseItems";
 
 const WarehouseReceivig = () => {
   const [loader, setLoader] = useState(true);
+  const [refreshSlipItems,setRefreshSlipItems] = useState(0);
   const [warehouse, setWarehouse] = useState({});
   const [items, setItems] = useState([]);
+  const [showWarehouseItems, setShowWarehouseItems] = useState(false);
   const [warehouse_Item, setWarehouse_Item] = useState({});
   const [show_item, setShow_item] = useState(false);
   const [show_item_list, setShow_item_list] = useState(false);
@@ -42,15 +44,13 @@ const WarehouseReceivig = () => {
 
   ///////////////////save button/////////////////////
   const [saveNew, setSaveNew] = useState(false);
-  const [savedNewResp, setSavedNewResp] = useState('');
+  const [savedNewResp, setSavedNewResp] = useState("");
   const [slipSaved, setSlipSaved] = useState(false);
-  const [slipSavedCode, setSlipSavedCode] = useState('');
-
-
+  const [slipSavedCode, setSlipSavedCode] = useState("");
 
   ///////////////////Cancel button/////////////////////
   const [cancelSlipBtn, setCancelSlipBtn] = useState(false);
-  const [canceledSlipId, setCanceledSlipId] = useState('');
+  const [canceledSlipId, setCanceledSlipId] = useState("");
 
   ///////////////////Post button/////////////////////
   const [postSlipBtn, setPostSlipBtn] = useState(false);
@@ -187,10 +187,15 @@ const WarehouseReceivig = () => {
     };
 
     axiosIstance.post("receivingSlips/store", NewSlip).then((res) => {
-      console.log('saved slip' ,res)
+      console.log("saved slip", res);
       getSilpssOfWarehouse();
-      handleClose_addSlip();
-      setSlipSavedCode(res.data.code)
+      // handleClose_addSlip();
+      setSlipSavedCode(res.data.code);
+      if (res.data.status) {
+        setLoadedSlip(res.data.data);
+        setShowNew(false);
+        setSlipSaved(true);
+      }
     });
   };
   const getSilpssOfWarehouse = () => {
@@ -219,12 +224,9 @@ const WarehouseReceivig = () => {
     setCancelSlipBtn(false);
   };
 
-
   const handleClose_openSlip = () => {
     setOpenSlip(false);
   };
-
-
 
   const Search_slip = (slipId) => {
     if (!slipId) {
@@ -251,33 +253,29 @@ const WarehouseReceivig = () => {
     }
   };
   // new slip header
-const handleShowNew = () => { 
-  setShowNew(true)
-}  
-//TODO Remove loaded slip data
+  const handleShowNew = () => {
+    setShowNew(true);
+  };
+  //TODO Remove loaded slip data
   const handleNewButton = () => {
     handleShow_addSlip(true);
     setLoadedSlip("");
   };
-   // save slip header
-  const handleSaveNew = () => { 
-    setSaveNew(true)
-  }
-  const handleSavNewSlip = () => { 
+  // save slip header
+  const handleSaveNew = () => {
+    setSaveNew(true);
+  };
+  const handleSavNewSlip = () => {
     // const result = {};
-    if(saveNew){
+    if (saveNew) {
       addSlip();
-      console.log('res inside el if el awel' ,slipSavedCode);
-      // console.log('res inside el if' , result);
-      if(slipSavedCode === 200){
-        setSlipSaved(true)
-      }
+      console.log("res inside el if el awel", slipSavedCode);
     }
-  }
-   // Cancel slip 
-  const handleCnacelSlip = () => { 
-    setCancelSlipBtn(true)
-  }
+  };
+  // Cancel slip
+  const handleCnacelSlip = () => {
+    setCancelSlipBtn(true);
+  };
   const cancelSlip = (id) => {
     var canceledSlip = {
       _method: "put",
@@ -289,13 +287,13 @@ const handleShowNew = () => {
       // getSilpssOfWarehouse();
     });
   };
-   // Post slip 
-   const handlePostSlip = () => { 
-    setPostSlipBtn(true)
-  }
-  const handleClose_postSlip = () => { 
-    setPostSlipBtn(false)
-  }
+  // Post slip
+  const handlePostSlip = () => {
+    setPostSlipBtn(true);
+  };
+  const handleClose_postSlip = () => {
+    setPostSlipBtn(false);
+  };
   const PostSlip = () => {
     var slip = {
       _method: "put",
@@ -322,12 +320,30 @@ const handleShowNew = () => {
           <Button className="m-3" onClick={() => setOpenSlip(true)}>
             open
           </Button>
-          <Button className="m-3" onClick={() => {handleNewButton(); handleShowNew(true); }}>
+          <Button
+            className="m-3"
+            onClick={() => {
+              handleNewButton();
+              handleShowNew(true);
+            }}
+          >
             new
           </Button>
-          <Button className="m-3" onClick={() => {handleSaveNew(); handleSavNewSlip();}}>save</Button>
-          <Button className="m-3" onClick={() => handleCnacelSlip()}>cancel</Button>
-          <Button className="m-3"  onClick={() => handlePostSlip() }>post</Button>
+          <Button
+            className="m-3"
+            onClick={() => {
+              handleSaveNew();
+              handleSavNewSlip();
+            }}
+          >
+            save
+          </Button>
+          <Button className="m-3" onClick={() => handleCnacelSlip()}>
+            cancel
+          </Button>
+          <Button className="m-3" onClick={() => handlePostSlip()}>
+            post
+          </Button>
           <Button className="m-3">reprint</Button>
           <Button className="m-3">exit</Button>
         </Navbar>
@@ -471,8 +487,7 @@ const handleShowNew = () => {
         </Modal.Footer>
       </Modal>
 
-
-       <Modal show={cancelSlipBtn} onHide={handleClose_cancelSlip}>
+      <Modal show={cancelSlipBtn} onHide={handleClose_cancelSlip}>
         <Modal.Header closeButton>
           <Modal.Title>Cancel Slip </Modal.Title>
         </Modal.Header>
@@ -482,7 +497,7 @@ const handleShowNew = () => {
             <Form.Control
               value={canceledSlipId}
               onInput={(e) => {
-                setCanceledSlipId( e.target.value );
+                setCanceledSlipId(e.target.value);
               }}
               type="Text"
               placeholder="Enter slip id"
@@ -490,15 +505,17 @@ const handleShowNew = () => {
           </Form.Group>
         </Modal.Body>
         <Modal.Footer className="d-flex justify-content-center">
-          <Button className="btn btn-success " onClick={() => cancelSlip(canceledSlipId)}>
+          <Button
+            className="btn btn-success "
+            onClick={() => cancelSlip(canceledSlipId)}
+          >
             Cancel Slip
           </Button>
         </Modal.Footer>
-      </Modal> 
-      
+      </Modal>
 
-          {/* post slip */}
-  <Modal show={postSlipBtn} onHide={handleClose_postSlip}>
+      {/* post slip */}
+      <Modal show={postSlipBtn} onHide={handleClose_postSlip}>
         <Modal.Header closeButton>
           <Modal.Title>Post Slip </Modal.Title>
         </Modal.Header>
@@ -508,24 +525,20 @@ const handleShowNew = () => {
             <Form.Control
               value={receivingSlip_id}
               onInput={(e) => {
-                setReceivingSlip_id( e.target.value);
+                setReceivingSlip_id(e.target.value);
               }}
               type="Text"
               placeholder="Enter Id"
             />
           </Form.Group>
-          {resMsg ? resMsg : ''} <br></br>
+          {resMsg ? resMsg : ""} <br></br>
         </Modal.Body>
         <Modal.Footer className="d-flex justify-content-center">
-          
           <Button className="btn btn-success " onClick={() => PostSlip()}>
             post Slip
           </Button>
         </Modal.Footer>
       </Modal>
-
-
-
 
       {/* <Modal show={add_slip} onHide={handleClose_addSlip}>
         <Modal.Header closeButton>
@@ -562,8 +575,7 @@ const handleShowNew = () => {
         </Modal.Footer>
       </Modal> */}
 
-
-         {/* openSlip slip */}
+      {/* openSlip slip */}
       <Modal show={openSlip} onHide={handleClose_openSlip}>
         <Modal.Header closeButton>
           <Modal.Title>search slips</Modal.Title>
@@ -609,8 +621,6 @@ const handleShowNew = () => {
         </Modal.Footer>
       </Modal>
 
-
-
       {/* new slip */}
       {showNew ? (
         <div className="row">
@@ -629,19 +639,33 @@ const handleShowNew = () => {
                   {/**<th>Actions</th>*/}
                 </tr>
               </thead>
-                      <td></td>
-                      <td></td>
-                      <td><Form.Control value={slip.PO_number} onInput={(e) => {setSlip({ ...slip, PO_number: e.target.value });}} type="Text" placeholder="Enter Po Number"/></td>
-                      <td><Form.Control value={slip.supplier_name} onInput={(e) => {setSlip({ ...slip, supplier_name: e.target.value });}} type="Text" placeholder="Enter Supplier Name "/></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
+              <td></td>
+              <td></td>
+              <td>
+                <Form.Control
+                  value={slip.PO_number}
+                  onInput={(e) => {
+                    setSlip({ ...slip, PO_number: e.target.value });
+                  }}
+                  type="Text"
+                  placeholder="Enter Po Number"
+                />
+              </td>
+              <td>
+                <Form.Control
+                  value={slip.supplier_name}
+                  onInput={(e) => {
+                    setSlip({ ...slip, supplier_name: e.target.value });
+                  }}
+                  type="Text"
+                  placeholder="Enter Supplier Name "
+                />
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
             </Table>
           </div>
-           {/* { slipSaved ? <button onClick={}>add items</button> : '' } */}
-          {/* { slipSaved ? <SlipItems warehouseId={params.id} receivingSlipId={''} /> : '' } */}
-          {/* {slipSaved ? <WarehouseItems show={slipSaved} wareHouseItems={items}  silp_id={77} /> : ''} */}
-          
         </div>
       ) : (
         ""
@@ -661,7 +685,7 @@ const handleShowNew = () => {
                   <th>Status</th>
                   <th>Created_at</th>
                   <th>Created_by</th>
-                  {/**<th>Actions</th>*/}
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -675,7 +699,18 @@ const handleShowNew = () => {
                       <td>{silp.status}</td>
                       <td>{silp.created_at}</td>
                       <td>{silp.created_by}</td>
-
+                      <td>
+                        <div className="d-flex">
+                          <Button
+                            className="m-1"
+                            onClick={() => {
+                              setShowWarehouseItems(true);
+                            }}
+                          >
+                            Add Item
+                          </Button>
+                        </div>
+                      </td>
                       {/**
                         <td>
                         <div className="d-flex">
@@ -710,18 +745,21 @@ const handleShowNew = () => {
       ) : (
         ""
       )}
-      <SlipItems warehouseId={params.id} receivingSlipId={loadedSlip[0]?.id} />
-      {/**silp_detail ? (
-        <SilpDetails
-          show={silp_detail}
-          silp_id={silp_detail_id}
-          handleClose={() => setSilp_detail(false)}
-          warehouse_id={params.id}
+
+      <SlipItems
+        warehouseId={params.id}
+        receivingSlipId={loadedSlip[0]?.id}
+        refreshSlipItems={refreshSlipItems}
+      />
+      {showWarehouseItems && (
+        <WarehouseItems
+          show={showWarehouseItems}
           wareHouseItems={items}
-        ></SilpDetails>
-      ) : (
-        ""
-      )**/}
+          slipId={loadedSlip[0]?.id}
+          closeModal={setShowWarehouseItems}
+          itemAddedListener={() => setRefreshSlipItems(prev =>prev+1)}
+        />
+      )}
     </React.Fragment>
   );
 };

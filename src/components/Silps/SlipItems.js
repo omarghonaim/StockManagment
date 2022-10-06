@@ -1,16 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Table, Button, Spinner } from "react-bootstrap";
 
 import useFetchSlipItems from "../../hooks/useFetchSlipItems";
 import UpdateSlipItemModal from "./UpdateSlipItemModal";
 import axiosInstance from "../../Config/config";
 
-function SlipItems({ warehouseId, receivingSlipId }) {
+function SlipItems({ warehouseId, receivingSlipId, refreshSlipItems }) {
   const { slipItems, isLoadingItems, refresh } = useFetchSlipItems(
     warehouseId,
     receivingSlipId
   );
 
+  useEffect(() => {
+    if (refreshSlipItems !== 0) {
+      refresh();
+    }
+  }, [refreshSlipItems]);
   const [itemToUpdate, setItemToUpdate] = useState(null);
 
   const hideUpdateModalHandler = (wasUpdated) => {
