@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axiosIstance from "../../Config/config";
 import { useParams } from "react-router";
 import { Table } from "react-bootstrap";
@@ -11,10 +11,15 @@ import ReactLoader from "react-loader";
 import Spinner from "react-bootstrap/Spinner";
 import SlipItems from "../Silps/SlipItems";
 import WarehouseItems from "../Silps/WarehouseItems";
+import { useReactToPrint } from "react-to-print";
 
 const WarehouseReceivig = () => {
+  const contentToPrintRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => contentToPrintRef.current,
+  });
   const [loader, setLoader] = useState(true);
-  const [refreshSlipItems,setRefreshSlipItems] = useState(0);
+  const [refreshSlipItems, setRefreshSlipItems] = useState(0);
   const [warehouse, setWarehouse] = useState({});
   const [items, setItems] = useState([]);
   const [showWarehouseItems, setShowWarehouseItems] = useState(false);
@@ -344,7 +349,15 @@ const WarehouseReceivig = () => {
           <Button className="m-3" onClick={() => handlePostSlip()}>
             post
           </Button>
-          <Button className="m-3">reprint</Button>
+          <Button
+            className="m-3"
+            onClick={() => {
+              console.log("hello");
+              handlePrint();
+            }}
+          >
+            reprint
+          </Button>
           <Button className="m-3">exit</Button>
         </Navbar>
         {/* <Tabs defaultActiveKey="silps"  id="justify-tab-example" className="my-3 col-12" justify  active={silps}>
@@ -671,47 +684,48 @@ const WarehouseReceivig = () => {
         ""
       )}
       {/* searched slip */}
-      {loadedSlip.length > 0 ? (
-        <div className="row">
-          <div className="col-12 px-5">
-            <caption>Receiving</caption>
-            <Table bordered hover size="lg" className="bg-white">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Serial</th>
-                  <th>PO_number</th>
-                  <th>Supplier Name</th>
-                  <th>Status</th>
-                  <th>Created_at</th>
-                  <th>Created_by</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {loadedSlip.map((silp, index) => {
-                  return (
-                    <tr key={index}>
-                      <td>{silp.id}</td>
-                      <td>{silp.serial ? silp.serial : "Not found"}</td>
-                      <td>{silp.PO_number}</td>
-                      <td>{silp.supplier_name}</td>
-                      <td>{silp.status}</td>
-                      <td>{silp.created_at}</td>
-                      <td>{silp.created_by}</td>
-                      <td>
-                        <div className="d-flex">
-                          <Button
-                            className="m-1"
-                            onClick={() => {
-                              setShowWarehouseItems(true);
-                            }}
-                          >
-                            Add Item
-                          </Button>
-                        </div>
-                      </td>
-                      {/**
+      <div ref={contentToPrintRef}>
+        {loadedSlip.length > 0 ? (
+          <div className="row">
+            <div className="col-12 px-5">
+              <caption>Receiving</caption>
+              <Table bordered hover size="lg" className="bg-white">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Serial</th>
+                    <th>PO_number</th>
+                    <th>Supplier Name</th>
+                    <th>Status</th>
+                    <th>Created_at</th>
+                    <th>Created_by</th>
+                    <th className="hide-on-print">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loadedSlip.map((silp, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{silp.id}</td>
+                        <td>{silp.serial ? silp.serial : "Not found"}</td>
+                        <td>{silp.PO_number}</td>
+                        <td>{silp.supplier_name}</td>
+                        <td>{silp.status}</td>
+                        <td>{silp.created_at}</td>
+                        <td>{silp.created_by}</td>
+                        <td className="hide-on-print">
+                          <div className="d-flex ">
+                            <Button
+                              className="m-1"
+                              onClick={() => {
+                                setShowWarehouseItems(true);
+                              }}
+                            >
+                              Add Item
+                            </Button>
+                          </div>
+                        </td>
+                        {/**
                         <td>
                         <div className="d-flex">
                           <Button
@@ -735,29 +749,30 @@ const WarehouseReceivig = () => {
                         </div>
                       </td>
                      */}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            </div>
           </div>
-        </div>
-      ) : (
-        ""
-      )}
+        ) : (
+          ""
+        )}
 
-      <SlipItems
-        warehouseId={params.id}
-        receivingSlipId={loadedSlip[0]?.id}
-        refreshSlipItems={refreshSlipItems}
-      />
+        <SlipItems
+          warehouseId={params.id}
+          receivingSlipId={loadedSlip[0]?.id}
+          refreshSlipItems={refreshSlipItems}
+        />
+      </div>
       {showWarehouseItems && (
         <WarehouseItems
           show={showWarehouseItems}
           wareHouseItems={items}
           slipId={loadedSlip[0]?.id}
           closeModal={setShowWarehouseItems}
-          itemAddedListener={() => setRefreshSlipItems(prev =>prev+1)}
+          itemAddedListener={() => setRefreshSlipItems((prev) => prev + 1)}
         />
       )}
     </React.Fragment>

@@ -70,7 +70,7 @@ function SlipItems({ warehouseId, receivingSlipId, refreshSlipItems }) {
                       <th>QTY</th>
                       <th>cost</th>
                       <th>total</th>
-                      <th>Actions</th>
+                      <th className="hide-on-print">Actions</th>
                     </tr>
                   </thead>
 
@@ -84,7 +84,7 @@ function SlipItems({ warehouseId, receivingSlipId, refreshSlipItems }) {
                           <td>{item.QTY}</td>
                           <td>{item.cost}</td>
                           <td>{item.total}</td>
-                          <td>
+                          <td className="hide-on-print">
                             <div className="d-flex">
                               <Button
                                 className="m-1"

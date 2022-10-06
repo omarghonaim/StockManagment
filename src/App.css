@@ -46,3 +46,12 @@
 .bg-white{
   background-color: white;
 }
+
+
+@media print {
+  .hide-on-print{
+    display: none !important;
+    }
+}
+
+
