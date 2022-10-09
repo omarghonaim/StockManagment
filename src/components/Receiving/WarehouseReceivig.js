@@ -10,6 +10,9 @@ import ReactLoader from "react-loader";
 
 import Spinner from "react-bootstrap/Spinner";
 import SlipItems from "../Silps/SlipItems";
+
+import WarehouseItems from '../Silps/WarehouseItems';
+import SearchSlips from './SearchSlips';
 import WarehouseItems from "../Silps/WarehouseItems";
 import { useReactToPrint } from "react-to-print";
 
@@ -43,7 +46,7 @@ const WarehouseReceivig = () => {
   const [openSlip, setOpenSlip] = useState(false);
   const [loadedSlip, setLoadedSlip] = useState("");
   const [slipId, setSlipId] = useState("");
-
+  const [searchedKey, setSearchedKey] = useState("");
   ///////////////////new button/////////////////////
   const [showNew, setShowNew] = useState(false);
 
@@ -232,6 +235,12 @@ const WarehouseReceivig = () => {
   const handleClose_openSlip = () => {
     setOpenSlip(false);
   };
+
+
+  // const Searched_slip = () => {
+  //   { searchedKey ? <SearchSlips searchedKey={searchedKey} /> : '' }
+  // }
+
 
   const Search_slip = (slipId) => {
     if (!slipId) {
@@ -599,22 +608,26 @@ const WarehouseReceivig = () => {
             controlId="exampleForm.ControlInput1"
             validated
           >
-            <Form.Label>Slip Id</Form.Label>
+            <Form.Label>Slip Id,Po Number,Supplier Name</Form.Label>
             <Form.Control
-              onInput={(e) => setSlipId(e.target.value)}
-              type="Text"
-              placeholder="Enter Po Number"
+              onInput={(e) => setSearchedKey(e.target.value)}
+              type="text"
+              placeholder="Enter"
               required
             />
-            {searchSlipError && (
+            {/* {searchSlipError && (
               <div className="error p-2">{searchSlipError}</div>
+            )} */}
+            {searchedKey && (
+              <SearchSlips searchedKey={searchedKey} setSearchSlipIsLoading={setSearchSlipIsLoading} setSearchSlipError= {setSearchSlipError} Search_slip={Search_slip} />
             )}
           </Form.Group>
         </Modal.Body>
         <Modal.Footer className="d-flex justify-content-center">
           <Button
             className="btn btn-success "
-            onClick={() => Search_slip(slipId)}
+            // onClick={() => Searched_slip(searchedKey)}
+            // onClick={() => Search_slip(slipId)}
           >
             {searchSlipIsLoading ? (
               <>
