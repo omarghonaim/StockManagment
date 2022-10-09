@@ -11,7 +11,7 @@ import ReactLoader from "react-loader";
 import Spinner from "react-bootstrap/Spinner";
 import SlipItems from "../Silps/SlipItems";
 
-import WarehouseItems from '../Silps/WarehouseItems';
+// import WarehouseItems from '../Silps/WarehouseItems';
 import SearchSlips from './SearchSlips';
 import WarehouseItems from "../Silps/WarehouseItems";
 import { useReactToPrint } from "react-to-print";
