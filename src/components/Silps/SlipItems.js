@@ -1,16 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Table, Button, Spinner } from "react-bootstrap";
 
 import useFetchSlipItems from "../../hooks/useFetchSlipItems";
 import UpdateSlipItemModal from "./UpdateSlipItemModal";
 import axiosInstance from "../../Config/config";
 
-function SlipItems({ warehouseId, receivingSlipId }) {
+function SlipItems({ warehouseId, receivingSlipId, refreshSlipItems }) {
   const { slipItems, isLoadingItems, refresh } = useFetchSlipItems(
     warehouseId,
     receivingSlipId
   );
 
+  useEffect(() => {
+    if (refreshSlipItems !== 0) {
+      refresh();
+    }
+  }, [refreshSlipItems]);
   const [itemToUpdate, setItemToUpdate] = useState(null);
 
   const hideUpdateModalHandler = (wasUpdated) => {
@@ -65,7 +70,7 @@ function SlipItems({ warehouseId, receivingSlipId }) {
                       <th>QTY</th>
                       <th>cost</th>
                       <th>total</th>
-                      <th>Actions</th>
+                      <th className="hide-on-print">Actions</th>
                     </tr>
                   </thead>
 
@@ -79,7 +84,7 @@ function SlipItems({ warehouseId, receivingSlipId }) {
                           <td>{item.QTY}</td>
                           <td>{item.cost}</td>
                           <td>{item.total}</td>
-                          <td>
+                          <td className="hide-on-print">
                             <div className="d-flex">
                               <Button
                                 className="m-1"
