@@ -46,7 +46,10 @@
 .bg-white{
   background-color: white;
 }
-
+.modal
+{
+  --bs-modal-width: 740px !important;
+}
 
 @media print {
   .hide-on-print{

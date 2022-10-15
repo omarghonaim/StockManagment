@@ -16,7 +16,7 @@ function UpdateSlipItemModal({ itemToUpdate, hideModalAndRefresh }) {
     axiosInstance
       .post("receivingSlipItems/update", update)
       .then((response) => {
-        console.log("update", response);
+        console.log("update res", response);
         //   handleClose_update_item();
         hideModalAndRefresh(true);
       })

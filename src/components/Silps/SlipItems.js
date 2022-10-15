@@ -23,11 +23,12 @@ function SlipItems({ warehouseId, receivingSlipId, refreshSlipItems }) {
     if (wasUpdated) refresh();
   };
 
-  const deleteItem = (id) => {
-    const cancelItem = {
+  const deleteItem = (item) => {
+    var cancelItem = {
       _method: "put",
-      receivingSlip_item_id: id,
+      receivingSlip_item_id: item.id,
     };
+    console.log('delteted item ', item)
 
     axiosInstance
       .post("receivingSlipItems/delete", cancelItem)
@@ -67,6 +68,7 @@ function SlipItems({ warehouseId, receivingSlipId, refreshSlipItems }) {
                       <th>ID</th>
                       <th>item_code</th>
                       <th>description</th>
+                      <th>Status</th>
                       <th>QTY</th>
                       <th>cost</th>
                       <th>total</th>
@@ -81,11 +83,12 @@ function SlipItems({ warehouseId, receivingSlipId, refreshSlipItems }) {
                           <td>{item.id}</td>
                           <td>{item.item_code}</td>
                           <td>{item.description}</td>
+                          <th>{item.status}</th>
                           <td>{item.QTY}</td>
                           <td>{item.cost}</td>
                           <td>{item.total}</td>
                           <td className="hide-on-print">
-                            <div className="d-flex">
+                          {item.status === "Deleted" ? '' :  <div className="d-flex">
                               <Button
                                 className="m-1"
                                 onClick={() => {
@@ -98,12 +101,12 @@ function SlipItems({ warehouseId, receivingSlipId, refreshSlipItems }) {
                               <Button
                                 className="m-1"
                                 onClick={() => {
-                                  deleteItem(item.id);
+                                  deleteItem(item);
                                 }}
                               >
                                 Delete
                               </Button>
-                            </div>
+                            </div>} 
                           </td>
                         </tr>
                       );

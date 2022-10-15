@@ -316,6 +316,8 @@ const WarehouseReceivig = () => {
     try {
       axiosIstance.post(`receivingSlips/post`, slip).then((res) => {
         console.log("rec slip res", res);
+        if(res.data.code === 200){ handlePrint();}
+       
         setResMsg(res.data.message);
       });
     } catch (error) {}
@@ -727,7 +729,7 @@ const WarehouseReceivig = () => {
                         <td>{silp.created_at}</td>
                         <td>{silp.created_by}</td>
                         <td className="hide-on-print">
-                          <div className="d-flex ">
+                        {silp.status === "Recieved" ? '' :<div className="d-flex ">
                             <Button
                               className="m-1"
                               onClick={() => {
@@ -736,7 +738,7 @@ const WarehouseReceivig = () => {
                             >
                               Add Item
                             </Button>
-                          </div>
+                          </div> } 
                         </td>
                         {/**
                         <td>
